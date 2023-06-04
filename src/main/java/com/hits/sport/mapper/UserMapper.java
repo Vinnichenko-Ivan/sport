@@ -1,0 +1,14 @@
+package com.hits.sport.mapper;
+
+import com.hits.sport.dto.RegisterDto;
+import com.hits.sport.dto.UserDto;
+import com.hits.sport.model.User;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+@Mapper(componentModel = "spring")
+public interface UserMapper {
+    UserDto map(User user);
+    @Mapping(target = "password", ignore = true)
+    User map(RegisterDto dto);
+}
