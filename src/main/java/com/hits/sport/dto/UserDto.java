@@ -7,4 +7,5 @@ public class UserDto {
     private String email;
     private String login;
     private String name;
+    private Boolean isTrainer;
 }

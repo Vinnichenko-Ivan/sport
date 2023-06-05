@@ -21,4 +21,10 @@ public class Token {
     private TokenType type;
 
     private Date expDate;
+
+    @PrePersist
+    public void generate()
+    {
+        this.id = java.util.UUID.randomUUID();
+    }
 }

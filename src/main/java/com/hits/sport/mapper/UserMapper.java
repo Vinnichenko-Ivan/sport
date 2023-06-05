@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+    @Mapping(target = "isTrainer", ignore = true)
     UserDto map(User user);
     @Mapping(target = "password", ignore = true)
     User map(RegisterDto dto);

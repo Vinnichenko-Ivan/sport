@@ -20,20 +20,24 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public String generateToken(User user, TokenType type) {
         String tokenValue = "";
+        Date expDate = null;
         if(type == TokenType.CONFIRM) {
             tokenValue = generateToken(true, 20);
+            expDate = new Date(System.currentTimeMillis() + (1000 * 60 * 60 * 24));
         }
         else if(type == TokenType.PASSWORD_CHANGE) {
             tokenValue = generateToken(false, 8);
+            expDate = new Date(System.currentTimeMillis() + (1000 * 60 * 60 * 24));
         }
         else if(type == TokenType.RESTORE) {
             tokenValue = generateToken(true, 15);
+            expDate = new Date(System.currentTimeMillis() + (1000 * 60 * 60 * 24));
         }
         Token token = new Token();
         token.setToken(tokenValue);
         token.setUser(user);
         token.setType(type);
-        token.setExpDate(new Date(System.currentTimeMillis() + (1000 * 60 * 60 * 24)));
+        token.setExpDate(expDate);
         tokenRepository.save(token);
         return tokenValue;
     }
@@ -41,6 +45,9 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public User getByToken(String token, TokenType type, Boolean delete) {
         Token tokenEntity = tokenRepository.findByTokenAndAndType(token, type).orElseThrow(()->new BadRequestException("bad token"));
+        if(tokenEntity.getExpDate().before(new Date(System.currentTimeMillis()))) {
+            throw new BadRequestException("bad token");
+        }
         User user = tokenEntity.getUser();
         if(delete) {
             tokenRepository.delete(tokenEntity);

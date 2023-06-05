@@ -34,8 +34,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void register(RegisterDto registerDto) {
-        if(userRepository.existsByEmail(registerDto.getEmail()) || userRepository.existsByLogin(registerDto.getLogin())) {
-            throw new BadRequestException("login or email already used");
+        if(userRepository.existsByEmail(registerDto.getEmail())) {
+            throw new BadRequestException("email already used");
+        }
+        if(userRepository.existsByLogin(registerDto.getLogin())) {
+            throw new BadRequestException("login already used");
         }
         User user = userMapper.map(registerDto);
         user = userRepository.save(user);
@@ -63,7 +66,9 @@ public class UserServiceImpl implements UserService {
     public UserDto getMe() {
         UUID userId = jwtProvider.getId();
         User user = userRepository.findById(userId).orElseThrow(() -> new AuthException("bad token"));
-        return userMapper.map(user);
+        UserDto dto = userMapper.map(user);
+        dto.setIsTrainer(user.getTrainer()!=null);
+        return dto;
     }
 
     @Override
@@ -89,10 +94,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void confirmEmailToken(String token) {
-        User user = tokenService.getByToken(token, TokenType.CONFIRM, true);
-        user.setConfirm(true);
-        userRepository.save(user);
+    @Transactional
+    public String confirmEmailToken(String token) {
+        try{
+            User user = tokenService.getByToken(token, TokenType.CONFIRM, true);
+            user.setConfirm(true);
+            userRepository.save(user);
+        } catch (Exception e) {
+            return "Не подтверждено";
+        }
+        return "Подтверждено";
     }
 
     @Override

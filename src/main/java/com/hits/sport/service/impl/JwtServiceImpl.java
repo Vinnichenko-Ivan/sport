@@ -35,7 +35,7 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String generateAccessToken(User user) {
         final Date accessExpiration = new Date(System.currentTimeMillis() + (1000 * 60 * 60));
-        return Jwts.builder()
+        return "Bearer " + Jwts.builder()
                 .setSubject(user.getLogin())
                 .setExpiration(accessExpiration)
                 .signWith(jwtAccessSecret)

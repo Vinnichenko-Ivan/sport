@@ -23,5 +23,9 @@ public class Group {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups")
     private Set<User> users;
 
-
+    @PrePersist
+    public void generate()
+    {
+        this.id = java.util.UUID.randomUUID();
+    }
 }

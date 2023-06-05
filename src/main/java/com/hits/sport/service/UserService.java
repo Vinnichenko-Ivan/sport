@@ -17,7 +17,8 @@ public interface UserService {
 
     void restorePasswordToken(String login, String token, String password);
 
-    void confirmEmailToken(String token);
+    String confirmEmailToken(String token);
 
     TokenDto restoreToken(String token);
+
 }

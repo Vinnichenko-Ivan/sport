@@ -2,8 +2,8 @@ package com.hits.sport.model;
 
 import javax.persistence.*;
 
-import com.sun.istack.NotNull;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 import java.util.UUID;
@@ -11,6 +11,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "trainer")
+@NoArgsConstructor
 public class Trainer {
 
     @Id
@@ -18,7 +19,6 @@ public class Trainer {
     private UUID id;
 
     @OneToOne
-    @NotNull
     @PrimaryKeyJoinColumn(name="id", referencedColumnName="id")
     private User user;
 
@@ -35,4 +35,9 @@ public class Trainer {
     private Set<Exercise> myExercise;
 
     private String shortName;
+
+    public Trainer(User user) {
+        this.user = user;
+        this.id = user.getId();
+    }
 }
