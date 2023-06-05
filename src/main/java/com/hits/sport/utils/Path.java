@@ -12,10 +12,13 @@ public class Path {
     public static final String USER_EDIT = USER_URL;
     public static final String USER_PROMOTE = USER_URL + "promote/";
 
+    public static final String QUERY = "query/";
+
     public static final String TRAINER_URL = "trainer/";
     public static final String TRAINER_GET = TRAINER_URL;
-    public static final String TRAINER_ADD_QUERY = TRAINER_URL + "query/";
-    public static final String TRAINER_MY_QUERY = TRAINER_URL + "query/";
-    public static final String TRAINER_QUERY_ACCEPT = TRAINER_URL + "query/";
-    public static final String TRAINER_QUERY_REJECT = TRAINER_URL + "query/";
+
+    public static final String TRAINER_ADD_QUERY = TRAINER_URL + QUERY;
+    public static final String TRAINER_MY_QUERY = TRAINER_URL + QUERY;
+    public static final String TRAINER_QUERY_ACCEPT = TRAINER_URL + QUERY;
+    public static final String TRAINER_QUERY_REJECT = TRAINER_URL + QUERY;
 }
