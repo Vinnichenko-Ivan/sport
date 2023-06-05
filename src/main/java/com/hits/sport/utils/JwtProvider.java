@@ -1,11 +1,13 @@
 package com.hits.sport.utils;
 
+import com.hits.sport.exception.AuthException;
 import com.hits.sport.filter.JwtAuthentication;
+import com.hits.sport.model.User;
+import com.hits.sport.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,9 +21,11 @@ import java.util.UUID;
 @Log4j2
 public class JwtProvider {
     private final SecretKey jwtAccessSecret;
+    private final UserRepository userRepository;
 
-    public JwtProvider(@Value("${jwt.secret.access}") String secret) {
+    public JwtProvider(@Value("${jwt.secret.access}") String secret, UserRepository userRepository) {
         this.jwtAccessSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+        this.userRepository = userRepository;
     }
 
     public boolean validateAccessToken(String accessToken) {
@@ -41,6 +45,10 @@ public class JwtProvider {
     public String getLogin() {
         JwtAuthentication authentication = (JwtAuthentication) SecurityContextHolder.getContext().getAuthentication();
         return authentication.getUsername();
+    }
+
+    public User getUser() {
+        return userRepository.findById(getId()).orElseThrow(() -> new AuthException("bad token"));
     }
 
     private Claims getClaims(@NonNull String token, @NonNull Key secret) {

@@ -43,9 +43,4 @@ public class JwtServiceImpl implements JwtService {
                 .compact();
     }
 
-    @Override
-    public User getUser() {
-        return userRepository.findByLogin(jwtProvider.getLogin()).orElseThrow(() -> new AuthException("bad token"));
-    }
-
 }

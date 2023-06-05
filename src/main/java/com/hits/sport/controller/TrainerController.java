@@ -1,6 +1,8 @@
 package com.hits.sport.controller;
 
 import com.hits.sport.dto.AddToTrainerUserDto;
+import com.hits.sport.dto.PaginationAnswerDto;
+import com.hits.sport.dto.PaginationQueryDto;
 import com.hits.sport.dto.ShortTrainerDto;
 import com.hits.sport.service.TrainerService;
 import io.swagger.annotations.Api;
@@ -9,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,28 +24,28 @@ import static com.hits.sport.utils.Path.*;
 @Validated
 public class TrainerController {
     private final TrainerService trainerService;
-    @GetMapping(TRAINER_GET)
-    public List<ShortTrainerDto> getTrainer(String shortName) {
-        return trainerService.getTrainer(shortName);
+    @PostMapping(TRAINER_GET)
+    public PaginationAnswerDto<ShortTrainerDto> getTrainer(String shortName, @Valid @RequestBody PaginationQueryDto paginationQueryDto) {
+        return trainerService.getTrainer(shortName, paginationQueryDto);
     }
 
     @PostMapping(TRAINER_ADD_QUERY)
-    public void addToTrainer(UUID trainerId) {
+    public void addToTrainer(@PathVariable UUID trainerId) {
         trainerService.addToTrainer(trainerId);
     }
 
-    @GetMapping(TRAINER_MY_QUERY)
-    public List<AddToTrainerUserDto> getMyQuery(String name) {
-        return trainerService.getMyQuery(name);
+    @PostMapping(TRAINER_MY_QUERY)
+    public PaginationAnswerDto<AddToTrainerUserDto> getMyQuery(String name, @Valid @RequestBody PaginationQueryDto paginationQueryDto) {
+        return trainerService.getMyQuery(name, paginationQueryDto);
     }
 
     @PutMapping(TRAINER_QUERY_ACCEPT)
-    public void acceptQuery(UUID queryId) {
+    public void acceptQuery(@PathVariable UUID queryId) {
         trainerService.acceptQuery(queryId);
     }
 
     @DeleteMapping(TRAINER_QUERY_REJECT)
-    public void rejectQuery(UUID queryId) {
+    public void rejectQuery(@PathVariable UUID queryId) {
         trainerService.rejectQuery(queryId);
     }
 }

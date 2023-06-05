@@ -6,5 +6,4 @@ import org.springframework.lang.NonNull;
 public interface JwtService {
     String generateAccessToken(@NonNull User user);
 
-    User getUser();
 }

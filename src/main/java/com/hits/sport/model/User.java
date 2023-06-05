@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -40,4 +41,8 @@ public class User {
         this.id = java.util.UUID.randomUUID();
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

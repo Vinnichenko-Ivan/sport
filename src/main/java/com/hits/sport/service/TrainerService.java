@@ -1,18 +1,16 @@
 package com.hits.sport.service;
 
-import com.hits.sport.dto.AddToTrainerUserDto;
-import com.hits.sport.dto.ShortTrainerDto;
-import com.hits.sport.dto.ShortUserDto;
+import com.hits.sport.dto.*;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface TrainerService {
-    List<ShortTrainerDto> getTrainer(String shortName);
+    PaginationAnswerDto<ShortTrainerDto> getTrainer(String shortName, PaginationQueryDto paginationQueryDto);
 
     void addToTrainer(UUID trainerId);
 
-    List<AddToTrainerUserDto> getMyQuery(String name);
+    PaginationAnswerDto<AddToTrainerUserDto> getMyQuery(String name, PaginationQueryDto paginationQueryDto);
 
     void acceptQuery(UUID queryId);
 

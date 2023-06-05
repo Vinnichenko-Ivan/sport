@@ -2,10 +2,7 @@ package com.hits.sport.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
@@ -22,4 +19,12 @@ public class AddToTrainerQuery {
     private User user;
 
     private Date createdDate;
+
+    @PrePersist
+    public void generate()
+    {
+        this.id = java.util.UUID.randomUUID();
+        this.createdDate = new Date(System.currentTimeMillis());
+    }
+
 }

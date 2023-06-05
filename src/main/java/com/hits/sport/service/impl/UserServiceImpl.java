@@ -63,8 +63,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getMe() {
-        UUID userId = jwtProvider.getId();
-        User user = userRepository.findById(userId).orElseThrow(() -> new AuthException("bad token"));
+        User user = jwtProvider.getUser();
         UserDto dto = userMapper.map(user);
         dto.setIsTrainer(user.getTrainer()!=null);
         return dto;
@@ -115,8 +114,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto editUser(EditUserDto editUserDto) {
-        UUID id = jwtProvider.getId();
-        User user = userRepository.findById(id).orElseThrow(()->new NotFoundException("error"));
+        User user = jwtProvider.getUser();
         if(!user.getEmail().equals(editUserDto.getEmail()) && userRepository.existsByEmail(editUserDto.getEmail()))
         {
             throw new BadRequestException("email already used");
@@ -131,8 +129,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void promoteToTrainer(String shortName) {
-        UUID id = jwtProvider.getId();
-        User user = userRepository.findById(id).orElseThrow(()->new NotFoundException("error"));
+        User user = jwtProvider.getUser();
         if(user.getTrainer() != null) {
             throw new BadRequestException("already trainer");
         }
