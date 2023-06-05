@@ -1,13 +1,12 @@
 package com.hits.sport.service.impl;
 
-import com.hits.sport.dto.CredentialsDto;
-import com.hits.sport.dto.RegisterDto;
-import com.hits.sport.dto.TokenDto;
-import com.hits.sport.dto.UserDto;
+import com.hits.sport.dto.*;
 import com.hits.sport.exception.AuthException;
 import com.hits.sport.exception.BadRequestException;
+import com.hits.sport.exception.NotFoundException;
 import com.hits.sport.mapper.UserMapper;
 import com.hits.sport.model.TokenType;
+import com.hits.sport.model.Trainer;
 import com.hits.sport.model.User;
 import com.hits.sport.repository.UserRepository;
 import com.hits.sport.service.*;
@@ -112,5 +111,34 @@ public class UserServiceImpl implements UserService {
         String accessToken = jwtService.generateAccessToken(user);
         String restoreToken = tokenService.generateToken(user, TokenType.RESTORE);
         return new TokenDto(restoreToken, accessToken);
+    }
+
+    @Override
+    public UserDto editUser(EditUserDto editUserDto) {
+        UUID id = jwtProvider.getId();
+        User user = userRepository.findById(id).orElseThrow(()->new NotFoundException("error"));
+        if(!user.getEmail().equals(editUserDto.getEmail()) && userRepository.existsByEmail(editUserDto.getEmail()))
+        {
+            throw new BadRequestException("email already used");
+        }
+        user.setEmail(editUserDto.getEmail());
+        user.setName(editUserDto.getName());
+        user = userRepository.save(user);
+        UserDto dto = userMapper.map(user);
+        dto.setIsTrainer(user.getTrainer()!=null);
+        return dto;
+    }
+
+    @Override
+    public void promoteToTrainer(String shortName) {
+        UUID id = jwtProvider.getId();
+        User user = userRepository.findById(id).orElseThrow(()->new NotFoundException("error"));
+        if(user.getTrainer() != null) {
+            throw new BadRequestException("already trainer");
+        }
+        Trainer trainer = new Trainer(user);
+        trainer.setShortName(shortName);
+        user.setTrainer(trainer);
+        userRepository.save(user);
     }
 }

@@ -1,9 +1,6 @@
 package com.hits.sport.service;
 
-import com.hits.sport.dto.CredentialsDto;
-import com.hits.sport.dto.RegisterDto;
-import com.hits.sport.dto.TokenDto;
-import com.hits.sport.dto.UserDto;
+import com.hits.sport.dto.*;
 
 public interface UserService {
 
@@ -21,4 +18,7 @@ public interface UserService {
 
     TokenDto restoreToken(String token);
 
+    UserDto editUser(EditUserDto editUserDto);
+
+    void promoteToTrainer(String shortName);
 }

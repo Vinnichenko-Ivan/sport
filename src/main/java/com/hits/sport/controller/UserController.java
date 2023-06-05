@@ -1,15 +1,14 @@
 package com.hits.sport.controller;
 
-import com.hits.sport.dto.CredentialsDto;
-import com.hits.sport.dto.RegisterDto;
-import com.hits.sport.dto.TokenDto;
-import com.hits.sport.dto.UserDto;
+import com.hits.sport.dto.*;
 import com.hits.sport.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 import static com.hits.sport.utils.Path.*;
 
@@ -22,12 +21,12 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping(USER_REGISTER)
-    void register(@RequestBody RegisterDto registerDto) {
+    void register(@Valid @RequestBody RegisterDto registerDto) {
         userService.register(registerDto);
     }
 
     @PostMapping(USER_SING_IN)
-    TokenDto singIn(@RequestBody CredentialsDto credentialsDto) {
+    TokenDto singIn(@Valid @RequestBody CredentialsDto credentialsDto) {
         return userService.singIn(credentialsDto);
     }
 
@@ -38,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping(USER_PASSWORD)
-    void restorePassword(@RequestBody String login) {
+    void restorePassword(@Valid @RequestBody String login) {
         userService.restorePassword(login);
     }
 
@@ -55,5 +54,15 @@ public class UserController {
     @PostMapping(USER_RESTORE_TOKEN)
     TokenDto restoreToken(String token) {
         return userService.restoreToken(token);
+    }
+
+    @PutMapping(USER_EDIT)
+    UserDto editUser(@Valid @RequestBody EditUserDto editUserDto){
+        return userService.editUser(editUserDto);
+    }
+
+    @PostMapping(USER_PROMOTE)
+    void promoteToTrainer(String shortName){
+        userService.promoteToTrainer(shortName);
     }
 }
