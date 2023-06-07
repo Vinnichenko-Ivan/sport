@@ -7,6 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -18,7 +20,17 @@ public class JwtAuthentication implements Authentication {
 //    private Set<Role> roles;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() { return null; }
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (authenticated) {
+            return Set.of(new GrantedAuthority() {
+                @Override
+                public String getAuthority() {
+                    return "AUTHORIZED";
+                }
+            });
+        }
+        return null;
+    }
 
     @Override
     public Object getCredentials() { return null; }

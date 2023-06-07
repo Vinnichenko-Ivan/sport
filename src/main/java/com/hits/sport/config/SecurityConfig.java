@@ -4,6 +4,7 @@ import com.hits.sport.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,10 +12,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import static com.hits.sport.utils.Path.*;
 
 @Configuration
 @EnableWebSecurity
@@ -32,6 +37,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                .and()
                 .csrf().disable()
                 .cors().configurationSource(corsConfiguration())
                 .and()
@@ -40,13 +47,24 @@ public class SecurityConfig {
                 .securityContext()
                 .and()
                 .authorizeHttpRequests(
-                        authz -> authz
-                                .antMatchers("/sing-in").permitAll()
-                                .antMatchers("/swagger-ui/**").permitAll()
-                                .antMatchers("/**").permitAll()
-                                .and()
-                                .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                ).build();
+                        authz -> {
+                                authz
+                                    .antMatchers("/swagger-ui/**").permitAll()
+                                    .antMatchers("/swagger-resources/**").permitAll()
+                                    .antMatchers("/v2/api-docs").permitAll()
+                                    .antMatchers(USER_REGISTER).permitAll()
+                                    .antMatchers(USER_SING_IN).permitAll()
+                                    .antMatchers(USER_RESTORE_TOKEN).permitAll()
+                                    .antMatchers(USER_PASSWORD).permitAll()
+                                    .antMatchers(USER_PASSWORD_RESTORE).permitAll()
+                                    .antMatchers(USER_EMAIL_CONFIRM).permitAll()
+                                    .anyRequest().authenticated()
+                                    .and()
+                                    .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                        }
+
+                )
+                .build();
     }
 
     @Bean
