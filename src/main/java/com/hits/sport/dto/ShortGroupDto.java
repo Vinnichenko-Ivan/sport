@@ -5,8 +5,9 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class ShortUserDto {
+public class ShortGroupDto {
     private UUID id;
     private String name;
-    private String login;
+    private int personCount;
+    private String mainTrainerName;
 }

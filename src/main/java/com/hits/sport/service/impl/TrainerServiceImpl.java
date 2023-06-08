@@ -1,12 +1,10 @@
 package com.hits.sport.service.impl;
 
-import com.hits.sport.dto.AddToTrainerUserDto;
-import com.hits.sport.dto.PaginationAnswerDto;
-import com.hits.sport.dto.PaginationQueryDto;
+import com.hits.sport.dto.*;
 import com.hits.sport.dto.ShortTrainerDto;
 import com.hits.sport.exception.BadRequestException;
+import com.hits.sport.exception.ForbiddenException;
 import com.hits.sport.exception.NotFoundException;
-import com.hits.sport.exception.NotImplementedException;
 import com.hits.sport.mapper.TrainerMapper;
 import com.hits.sport.model.*;
 import com.hits.sport.repository.AddToTrainerQueryRepository;
@@ -17,6 +15,7 @@ import com.hits.sport.repository.specification.TrainerShortNameSpecification;
 import com.hits.sport.service.TrainerService;
 import com.hits.sport.utils.JwtProvider;
 import com.hits.sport.utils.Utils;
+import com.hits.sport.repository.specification.MyUserNameSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -41,10 +40,7 @@ public class TrainerServiceImpl implements TrainerService {
                 new Sort.Order(Sort.Direction.ASC, Trainer_.shortName.getName())
         );
         Page<Trainer> page = trainerRepository.findAll(new TrainerShortNameSpecification(shortName), Utils.toPageable(paginationQueryDto, orders));
-        PaginationAnswerDto<ShortTrainerDto> dto = new PaginationAnswerDto<ShortTrainerDto>();
-        dto.setPage(page.getNumber());
-        dto.setMaxPage(page.getTotalPages());
-        dto.setSize(page.getSize());
+        PaginationAnswerDto<ShortTrainerDto> dto = Utils.toAnswerWData(page);
         dto.setData(page.getContent().stream().map(trainerMapper::map).collect(Collectors.toList()));
         return dto;
     }
@@ -67,15 +63,17 @@ public class TrainerServiceImpl implements TrainerService {
 
     @Override
     public PaginationAnswerDto<AddToTrainerUserDto> getMyQuery(String name, PaginationQueryDto paginationQueryDto) {
+        User user = jwtProvider.getUser();
+        Trainer trainer = user.getTrainer();
+        if(trainer == null) {
+            throw new ForbiddenException("not trainer");
+        }
         List<Sort.Order> orders = List.of(
                 new Sort.Order(Sort.Direction.ASC, AddToTrainerQuery_.createdDate.getName())
         );
         Page<AddToTrainerQuery> page = addToTrainerQueryRepository.findAll(new AddToTrainerQuerySpecification(name), Utils.toPageable(paginationQueryDto, orders));
 
-        PaginationAnswerDto<AddToTrainerUserDto> dto = new PaginationAnswerDto<>();
-        dto.setPage(page.getNumber());
-        dto.setMaxPage(page.getTotalPages());
-        dto.setSize(page.getSize());
+        PaginationAnswerDto<AddToTrainerUserDto> dto = Utils.toAnswerWData(page);
         dto.setData(page.getContent().stream().map((query) -> {
             AddToTrainerUserDto dtoTemp = new AddToTrainerUserDto();
             dtoTemp.setQueryId(query.getId());
@@ -110,5 +108,28 @@ public class TrainerServiceImpl implements TrainerService {
             trainerRepository.save(trainer);
         }
         addToTrainerQueryRepository.delete(query);
+    }
+
+    @Override
+    public PaginationAnswerDto<ShortUserDto> getMyUsers(String name, PaginationQueryDto paginationQueryDto) {
+        User user = jwtProvider.getUser();
+        Trainer trainer = user.getTrainer();
+        if(trainer == null) {
+            throw new ForbiddenException("not trainer");
+        }
+
+        Page<User> page = userRepository.findAll(new MyUserNameSpecification(trainer, name), Utils.toPageable(paginationQueryDto));
+        PaginationAnswerDto<ShortUserDto> dto = Utils.toAnswerWData(page);
+        dto.setData(
+                page.getContent().stream().map( (userTemp) -> {
+                        ShortUserDto shortUserDto = new ShortUserDto();
+                        shortUserDto.setId(userTemp.getId());
+                        shortUserDto.setName(userTemp.getName());
+                        shortUserDto.setLogin(userTemp.getLogin());
+                        return shortUserDto;
+                        }
+                ).collect(Collectors.toList())
+        );
+        return dto;
     }
 }

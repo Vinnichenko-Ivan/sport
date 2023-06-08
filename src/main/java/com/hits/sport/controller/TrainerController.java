@@ -1,9 +1,6 @@
 package com.hits.sport.controller;
 
-import com.hits.sport.dto.AddToTrainerUserDto;
-import com.hits.sport.dto.PaginationAnswerDto;
-import com.hits.sport.dto.PaginationQueryDto;
-import com.hits.sport.dto.ShortTrainerDto;
+import com.hits.sport.dto.*;
 import com.hits.sport.service.TrainerService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +44,10 @@ public class TrainerController {
     @DeleteMapping(TRAINER_QUERY_REJECT)
     public void rejectQuery(@PathVariable UUID queryId) {
         trainerService.rejectQuery(queryId);
+    }
+
+    @PostMapping(TRAINER_USERS)
+    public PaginationAnswerDto<ShortUserDto> getMyUsers(String name, @Valid @RequestBody PaginationQueryDto paginationQueryDto) {
+        return trainerService.getMyUsers(name, paginationQueryDto);
     }
 }

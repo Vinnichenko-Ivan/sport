@@ -15,4 +15,6 @@ public interface TrainerService {
     void acceptQuery(UUID queryId);
 
     void rejectQuery(UUID queryId);
+
+    PaginationAnswerDto<ShortUserDto> getMyUsers(String name, PaginationQueryDto paginationQueryDto);
 }

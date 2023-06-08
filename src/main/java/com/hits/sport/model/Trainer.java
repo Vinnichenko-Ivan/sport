@@ -26,7 +26,7 @@ public class Trainer {
     @ManyToMany
     private Set<User> users;
 
-    @OneToMany
+    @ManyToMany
     private Set<Group> groups;
 
     @ManyToMany

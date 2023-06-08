@@ -21,4 +21,14 @@ public class Path {
     public static final String TRAINER_MY_QUERY = TRAINER_URL + QUERY + "/my/";
     public static final String TRAINER_QUERY_ACCEPT = TRAINER_URL + QUERY + "{queryId}";
     public static final String TRAINER_QUERY_REJECT = TRAINER_URL + QUERY + "{queryId}";
+    public static final String TRAINER_USERS = TRAINER_URL + "users";
+    public static final String GROUP_URL = "/group/";
+
+    public static final String GROUPS_MY_URL = "/my/groups/";
+    public static final String GROUPS_TRAINING_URL = "/training/groups/";
+    public static final String GROUP_EDIT_URL = GROUP_URL + "{groupId}";
+
+    public static final String GROUP_USERS = GROUP_URL + "{groupId}/users";
+
+    public static final String GROUP_TRAINERS = GROUP_URL + "{groupId}/trainers";
 }

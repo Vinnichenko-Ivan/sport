@@ -64,4 +64,12 @@ public class Utils {
         paginationAnswerDto.setSize(page.getSize());
         return paginationAnswerDto;
     }
+
+    public static <T, K> PaginationAnswerDto<T> toAnswerWData(Page<K> page) {
+        PaginationAnswerDto<T> paginationAnswerDto = new PaginationAnswerDto<T>();
+        paginationAnswerDto.setPage(page.getNumber());
+        paginationAnswerDto.setMaxPage(page.getTotalPages());
+        paginationAnswerDto.setSize(page.getSize());
+        return paginationAnswerDto;
+    }
 }

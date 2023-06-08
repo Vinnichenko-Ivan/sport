@@ -27,6 +27,7 @@ import static com.hits.sport.utils.Path.*;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+    public static final String X_TOKEN_FOR_API = "TOP_SECRET_API_KEY";
     private final JwtFilter jwtFilter;
 
     @Bean
@@ -58,6 +59,7 @@ public class SecurityConfig {
                                     .antMatchers(USER_PASSWORD).permitAll()
                                     .antMatchers(USER_PASSWORD_RESTORE).permitAll()
                                     .antMatchers(USER_EMAIL_CONFIRM).permitAll()
+                                    .antMatchers("/user/confirm-all/").permitAll()
                                     .anyRequest().authenticated()
                                     .and()
                                     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

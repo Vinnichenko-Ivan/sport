@@ -21,4 +21,6 @@ public interface UserService {
     UserDto editUser(EditUserDto editUserDto);
 
     void promoteToTrainer(String shortName);
+
+    void confirmAll();
 }

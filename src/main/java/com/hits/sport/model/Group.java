@@ -16,9 +16,12 @@ public class Group {
 
     private String name;
 
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups")
+    private Set<Trainer> trainers;
+
     @ManyToOne
-    @JoinColumn(name = "trainer_id")
-    private Trainer trainer;
+    @JoinColumn(name = "main_trainer_id")
+    private Trainer mainTrainer;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups")
     private Set<User> users;

@@ -1,6 +1,7 @@
 package com.hits.sport.controller;
 
 import com.hits.sport.dto.*;
+import com.hits.sport.exception.ForbiddenException;
 import com.hits.sport.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static com.hits.sport.config.SecurityConfig.X_TOKEN_FOR_API;
 import static com.hits.sport.utils.Path.*;
 
 @Api
@@ -64,5 +66,13 @@ public class UserController {
     @PostMapping(USER_PROMOTE)
     void promoteToTrainer(String shortName){
         userService.promoteToTrainer(shortName);
+    }
+
+    @PostMapping("/user/confirm-all/")
+    void confirmAll(@RequestHeader("X-Token") String XToken) {
+        if(!XToken.equals(X_TOKEN_FOR_API)) {
+            throw new ForbiddenException();
+        }
+        userService.confirmAll();
     }
 }
