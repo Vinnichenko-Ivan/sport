@@ -16,11 +16,29 @@ public class Exercise {
 
     private String name;
 
+    private String description;
+
+    private Boolean published;
+
+    private Boolean common;
+
+    @Enumerated(EnumType.STRING)
+    private MuscleGroup muscleGroup;
+
     @ManyToOne
     @JoinColumn(name = "trainer_id")
     private Trainer trainer;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private Set<Trainer> allowedTrainer;
+    private Set<User> allowedTrainer;
 
+    @Embedded
+    private ExerciseValues defaultValues;
+
+
+    @PrePersist
+    public void generate()
+    {
+        this.id = java.util.UUID.randomUUID();
+    }
 }
