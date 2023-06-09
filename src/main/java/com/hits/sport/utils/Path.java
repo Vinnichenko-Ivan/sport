@@ -31,4 +31,8 @@ public class Path {
     public static final String GROUP_USERS = GROUP_URL + "{groupId}/users";
 
     public static final String GROUP_TRAINERS = GROUP_URL + "{groupId}/trainers";
+
+    public static final String EXERCISE_URL = "/exercise/";
+    public static final String EXERCISE_GET = EXERCISE_URL + "{exerciseId}";
+    public static final String EXERCISES_URL = "/exercises/";
 }

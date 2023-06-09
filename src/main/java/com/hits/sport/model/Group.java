@@ -26,6 +26,7 @@ public class Group {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups")
     private Set<User> users;
 
+    private UUID imageId;
     @PrePersist
     public void generate()
     {

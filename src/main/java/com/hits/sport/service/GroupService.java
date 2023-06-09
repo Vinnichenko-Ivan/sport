@@ -7,11 +7,11 @@ import java.util.Set;
 import java.util.UUID;
 
 public interface GroupService {
-    GroupDto createGroup(String name);
+    GroupDto createGroup(String name, UUID imageId);
 
-    PaginationAnswerDto<ShortGroupDto> myGroups(String name, PaginationQueryDto paginationQueryDto);
+    List<ShortGroupDto> myGroups(String name);
 
-    PaginationAnswerDto<ShortGroupDto> myTrainingGroups(String name, PaginationQueryDto paginationQueryDto);
+    List<ShortGroupDto> myTrainingGroups(String name);
 
     GroupDto editGroup(UUID groupId, GroupEditDto groupEditDto);
 

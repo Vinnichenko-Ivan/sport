@@ -23,7 +23,8 @@ public class Exercise {
     private Boolean common;
 
     @Enumerated(EnumType.STRING)
-    private MuscleGroup muscleGroup;
+    @ElementCollection
+    private Set<MuscleGroup> muscleGroups;
 
     @ManyToOne
     @JoinColumn(name = "trainer_id")
@@ -35,6 +36,7 @@ public class Exercise {
     @Embedded
     private ExerciseValues defaultValues;
 
+    private UUID imageId;
 
     @PrePersist
     public void generate()

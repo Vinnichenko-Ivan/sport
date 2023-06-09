@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,18 +24,18 @@ public class GroupController {
     private final GroupService groupService;
 
     @PostMapping(GROUP_URL)
-    public GroupDto createGroup(String name) {
-        return groupService.createGroup(name);
+    public GroupDto createGroup(String name, UUID imageId) {
+        return groupService.createGroup(name, imageId);
     }
 
-    @PostMapping(GROUPS_MY_URL)
-    public PaginationAnswerDto<ShortGroupDto> myGroups(String name, @Valid @RequestBody PaginationQueryDto paginationQueryDto) {
-        return groupService.myGroups(name, paginationQueryDto);
+    @GetMapping(GROUPS_MY_URL)
+    public List<ShortGroupDto> myGroups(String name) {
+        return groupService.myGroups(name);
     }
 
-    @PostMapping(GROUPS_TRAINING_URL)
-    public PaginationAnswerDto<ShortGroupDto> myTrainingGroups(String name, @Valid @RequestBody PaginationQueryDto paginationQueryDto) {
-        return groupService.myTrainingGroups(name, paginationQueryDto);
+    @GetMapping(GROUPS_TRAINING_URL)
+    public List<ShortGroupDto> myTrainingGroups(String name) {
+        return groupService.myTrainingGroups(name);
     }
 
     @PutMapping(GROUP_EDIT_URL)

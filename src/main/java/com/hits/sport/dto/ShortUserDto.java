@@ -9,4 +9,5 @@ public class ShortUserDto {
     private UUID id;
     private String name;
     private String login;
+    private UUID imageId;
 }
