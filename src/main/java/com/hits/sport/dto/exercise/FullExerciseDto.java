@@ -1,4 +1,4 @@
-package com.hits.sport.dto;
+package com.hits.sport.dto.exercise;
 
 import com.hits.sport.model.ExerciseValues;
 import com.hits.sport.model.MuscleGroup;

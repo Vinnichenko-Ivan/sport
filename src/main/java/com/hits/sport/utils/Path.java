@@ -35,4 +35,8 @@ public class Path {
     public static final String EXERCISE_URL = "/exercise/";
     public static final String EXERCISE_GET = EXERCISE_URL + "{exerciseId}";
     public static final String EXERCISES_URL = "/exercises/";
+
+    public static final String COMPLEX_URL = "/complex/";
+    public static final String THE_COMPLEX_URL = COMPLEX_URL + "{complexId}";
+    public static final String COMPLEXES_URL = "/complexes/";
 }

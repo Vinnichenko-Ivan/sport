@@ -1,9 +1,12 @@
 package com.hits.sport.service.impl;
 
-import com.hits.sport.dto.*;
+import com.hits.sport.dto.common.PaginationAnswerDto;
+import com.hits.sport.dto.common.PaginationQueryDto;
+import com.hits.sport.dto.exercise.FullExerciseDto;
+import com.hits.sport.dto.exercise.GetExerciseDto;
+import com.hits.sport.dto.exercise.ShortExerciseDto;
 import com.hits.sport.exception.ForbiddenException;
 import com.hits.sport.exception.NotFoundException;
-import com.hits.sport.exception.NotImplementedException;
 import com.hits.sport.mapper.ExerciseMapper;
 import com.hits.sport.model.CreateExerciseDto;
 import com.hits.sport.model.Exercise;

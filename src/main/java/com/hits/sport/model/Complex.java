@@ -27,9 +27,6 @@ public class Complex {
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<User> allowedTrainer;
 
-    @ManyToMany
-    private List<Exercise> exercises;
-
     @OneToMany(mappedBy = "complex")
     private List<SetExercise> exerciseValues;
 

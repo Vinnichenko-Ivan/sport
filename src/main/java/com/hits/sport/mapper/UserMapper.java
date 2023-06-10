@@ -1,8 +1,8 @@
 package com.hits.sport.mapper;
 
-import com.hits.sport.dto.RegisterDto;
-import com.hits.sport.dto.ShortUserDto;
-import com.hits.sport.dto.UserDto;
+import com.hits.sport.dto.user.RegisterDto;
+import com.hits.sport.dto.user.ShortUserDto;
+import com.hits.sport.dto.user.UserDto;
 import com.hits.sport.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

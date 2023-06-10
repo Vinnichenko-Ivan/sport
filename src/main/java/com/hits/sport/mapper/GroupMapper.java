@@ -1,8 +1,8 @@
 package com.hits.sport.mapper;
 
-import com.hits.sport.dto.GroupDto;
-import com.hits.sport.dto.GroupEditDto;
-import com.hits.sport.dto.ShortGroupDto;
+import com.hits.sport.dto.group.GroupDto;
+import com.hits.sport.dto.group.GroupEditDto;
+import com.hits.sport.dto.group.ShortGroupDto;
 import com.hits.sport.model.Group;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

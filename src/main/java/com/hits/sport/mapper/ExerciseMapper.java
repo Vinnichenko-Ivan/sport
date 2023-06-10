@@ -1,7 +1,7 @@
 package com.hits.sport.mapper;
 
-import com.hits.sport.dto.FullExerciseDto;
-import com.hits.sport.dto.ShortExerciseDto;
+import com.hits.sport.dto.exercise.FullExerciseDto;
+import com.hits.sport.dto.exercise.ShortExerciseDto;
 import com.hits.sport.model.CreateExerciseDto;
 import com.hits.sport.model.Exercise;
 import org.mapstruct.Mapper;

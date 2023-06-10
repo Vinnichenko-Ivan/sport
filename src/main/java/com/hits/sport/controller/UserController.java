@@ -1,6 +1,10 @@
 package com.hits.sport.controller;
 
-import com.hits.sport.dto.*;
+import com.hits.sport.dto.common.TokenDto;
+import com.hits.sport.dto.user.CredentialsDto;
+import com.hits.sport.dto.user.EditUserDto;
+import com.hits.sport.dto.user.RegisterDto;
+import com.hits.sport.dto.user.UserDto;
 import com.hits.sport.exception.ForbiddenException;
 import com.hits.sport.service.UserService;
 import io.swagger.annotations.Api;

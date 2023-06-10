@@ -1,7 +1,7 @@
 package com.hits.sport.utils;
 
-import com.hits.sport.dto.PaginationAnswerDto;
-import com.hits.sport.dto.PaginationQueryDto;
+import com.hits.sport.dto.common.PaginationAnswerDto;
+import com.hits.sport.dto.common.PaginationQueryDto;
 import com.hits.sport.exception.NotFoundException;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;

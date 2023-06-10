@@ -1,4 +1,4 @@
-package com.hits.sport.dto;
+package com.hits.sport.dto.group;
 
 import lombok.Data;
 

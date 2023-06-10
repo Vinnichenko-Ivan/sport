@@ -1,6 +1,10 @@
 package com.hits.sport.service;
 
-import com.hits.sport.dto.*;
+import com.hits.sport.dto.common.TokenDto;
+import com.hits.sport.dto.user.CredentialsDto;
+import com.hits.sport.dto.user.EditUserDto;
+import com.hits.sport.dto.user.RegisterDto;
+import com.hits.sport.dto.user.UserDto;
 
 public interface UserService {
 

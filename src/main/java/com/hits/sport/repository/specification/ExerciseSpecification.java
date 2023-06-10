@@ -1,6 +1,6 @@
 package com.hits.sport.repository.specification;
 
-import com.hits.sport.dto.GetExerciseDto;
+import com.hits.sport.dto.exercise.GetExerciseDto;
 import com.hits.sport.model.Exercise;
 import com.hits.sport.model.Exercise_;
 import com.hits.sport.model.Trainer;

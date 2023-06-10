@@ -1,6 +1,10 @@
 package com.hits.sport.controller;
 
-import com.hits.sport.dto.*;
+import com.hits.sport.dto.common.PaginationAnswerDto;
+import com.hits.sport.dto.common.PaginationQueryDto;
+import com.hits.sport.dto.trainer.AddToTrainerUserDto;
+import com.hits.sport.dto.trainer.ShortTrainerDto;
+import com.hits.sport.dto.user.ShortUserDto;
 import com.hits.sport.service.TrainerService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +13,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.UUID;
 
 import static com.hits.sport.utils.Path.*;

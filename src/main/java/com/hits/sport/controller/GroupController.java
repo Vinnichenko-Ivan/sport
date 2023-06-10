@@ -1,6 +1,8 @@
 package com.hits.sport.controller;
 
-import com.hits.sport.dto.*;
+import com.hits.sport.dto.group.GroupDto;
+import com.hits.sport.dto.group.GroupEditDto;
+import com.hits.sport.dto.group.ShortGroupDto;
 import com.hits.sport.service.GroupService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;

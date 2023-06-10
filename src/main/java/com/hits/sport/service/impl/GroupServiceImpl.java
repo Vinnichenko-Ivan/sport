@@ -1,10 +1,13 @@
 package com.hits.sport.service.impl;
 
-import com.hits.sport.dto.*;
+import com.hits.sport.dto.group.GroupDto;
+import com.hits.sport.dto.group.GroupEditDto;
+import com.hits.sport.dto.group.ShortGroupDto;
+import com.hits.sport.dto.trainer.ShortTrainerDto;
+import com.hits.sport.dto.user.ShortUserDto;
 import com.hits.sport.exception.BadRequestException;
 import com.hits.sport.exception.ForbiddenException;
 import com.hits.sport.exception.NotFoundException;
-import com.hits.sport.exception.NotImplementedException;
 import com.hits.sport.mapper.GroupMapper;
 import com.hits.sport.mapper.TrainerMapper;
 import com.hits.sport.mapper.UserMapper;

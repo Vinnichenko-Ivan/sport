@@ -1,6 +1,6 @@
 package com.hits.sport.mapper;
 
-import com.hits.sport.dto.ShortTrainerDto;
+import com.hits.sport.dto.trainer.ShortTrainerDto;
 import com.hits.sport.model.Trainer;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

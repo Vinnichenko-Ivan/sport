@@ -1,5 +1,7 @@
-package com.hits.sport.dto;
+package com.hits.sport.dto.group;
 
+import com.hits.sport.dto.user.ShortUserDto;
+import com.hits.sport.dto.trainer.ShortTrainerDto;
 import lombok.Data;
 
 import java.util.Set;

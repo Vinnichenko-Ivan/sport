@@ -1,4 +1,4 @@
-package com.hits.sport.dto;
+package com.hits.sport.dto.user;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

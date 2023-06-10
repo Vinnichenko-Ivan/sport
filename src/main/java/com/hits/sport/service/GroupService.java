@@ -1,6 +1,10 @@
 package com.hits.sport.service;
 
-import com.hits.sport.dto.*;
+import com.hits.sport.dto.group.GroupDto;
+import com.hits.sport.dto.group.GroupEditDto;
+import com.hits.sport.dto.group.ShortGroupDto;
+import com.hits.sport.dto.trainer.ShortTrainerDto;
+import com.hits.sport.dto.user.ShortUserDto;
 
 import java.util.List;
 import java.util.Set;

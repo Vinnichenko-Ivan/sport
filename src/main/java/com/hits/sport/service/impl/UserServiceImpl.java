@@ -1,9 +1,12 @@
 package com.hits.sport.service.impl;
 
-import com.hits.sport.dto.*;
+import com.hits.sport.dto.common.TokenDto;
+import com.hits.sport.dto.user.CredentialsDto;
+import com.hits.sport.dto.user.EditUserDto;
+import com.hits.sport.dto.user.RegisterDto;
+import com.hits.sport.dto.user.UserDto;
 import com.hits.sport.exception.AuthException;
 import com.hits.sport.exception.BadRequestException;
-import com.hits.sport.exception.NotFoundException;
 import com.hits.sport.mapper.UserMapper;
 import com.hits.sport.model.TokenType;
 import com.hits.sport.model.Trainer;
@@ -15,8 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
