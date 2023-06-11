@@ -74,7 +74,7 @@ public class TrainerServiceImpl implements TrainerService {
         List<Sort.Order> orders = List.of(
                 new Sort.Order(Sort.Direction.ASC, AddToTrainerQuery_.createdDate.getName())
         );
-        Page<AddToTrainerQuery> page = addToTrainerQueryRepository.findAll(new AddToTrainerQuerySpecification(name), Utils.toPageable(paginationQueryDto, orders));
+        Page<AddToTrainerQuery> page = addToTrainerQueryRepository.findAll(new AddToTrainerQuerySpecification(name, trainer), Utils.toPageable(paginationQueryDto, orders));
 
         PaginationAnswerDto<AddToTrainerUserDto> dto = Utils.toAnswerWData(page);
         dto.setData(page.getContent().stream().map((query) -> {

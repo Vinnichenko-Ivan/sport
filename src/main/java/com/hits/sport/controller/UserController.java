@@ -43,12 +43,12 @@ public class UserController {
     }
 
     @PostMapping(USER_PASSWORD)
-    void restorePassword(@Valid @RequestBody String login) {
+    void restorePassword(@Valid @RequestParam String login) {
         userService.restorePassword(login);
     }
 
     @PutMapping(USER_PASSWORD_RESTORE)
-    void restorePasswordToken(String login, String token, String password) {
+    void restorePasswordToken(@Valid @RequestParam String login, @Valid @RequestParam String token, @Valid @RequestParam String password) {
         userService.restorePasswordToken(login, token, password);
     }
 

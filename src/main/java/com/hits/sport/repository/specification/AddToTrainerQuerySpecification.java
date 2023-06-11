@@ -11,13 +11,18 @@ import javax.persistence.criteria.Root;
 
 public class AddToTrainerQuerySpecification implements Specification<AddToTrainerQuery> {
     private final String shortName;
+    private final Trainer trainer;
 
-    public AddToTrainerQuerySpecification(String shortName) {
+    public AddToTrainerQuerySpecification(String shortName, Trainer trainer) {
         this.shortName = shortName;
+        this.trainer = trainer;
     }
 
     @Override
     public Predicate toPredicate(Root<AddToTrainerQuery> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-        return criteriaBuilder.like(root.get(AddToTrainerQuery_.user).get(User_.name), Utils.toSqlParam(shortName));
+        return criteriaBuilder.and(
+                criteriaBuilder.like(root.get(AddToTrainerQuery_.user).get(User_.name), Utils.toSqlParam(shortName)),
+                criteriaBuilder.equal(root.get(AddToTrainerQuery_.trainer), trainer)
+        );
     }
 }
