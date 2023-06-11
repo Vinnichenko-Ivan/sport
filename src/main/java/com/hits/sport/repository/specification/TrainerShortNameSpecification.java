@@ -20,6 +20,6 @@ public class TrainerShortNameSpecification implements Specification<Trainer> {
 
     @Override
     public Predicate toPredicate(Root<Trainer> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-        return criteriaBuilder.like(root.get(Trainer_.shortName), Utils.toSqlParam(shortName));
+        return criteriaBuilder.like(criteriaBuilder.lower(root.get(Trainer_.shortName)), Utils.toSqlParam(shortName));
     }
 }
