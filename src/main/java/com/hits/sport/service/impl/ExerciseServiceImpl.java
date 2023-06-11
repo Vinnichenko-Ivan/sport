@@ -43,7 +43,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public FullExerciseDto getExercise(UUID exerciseId) {
         Exercise exercise = exerciseRepository.findById(exerciseId).orElseThrow(() -> new NotFoundException("exercise not found"));
-        FullExerciseDto dto = exerciseMapper.map(exercise);
+        FullExerciseDto dto = exerciseMapper.map(exercise); // TODO проверка доступа
         dto.setAllowedTrainerId(exercise.getAllowedTrainer().stream().map(User::getId).collect(Collectors.toSet()));
         return dto;
     }
@@ -59,10 +59,13 @@ public class ExerciseServiceImpl implements ExerciseService {
         exerciseRepository.save(exercise);
     }
 
-    private void checkTrainer(Trainer trainer) {
+    @Override
+    public void checkTrainer(Trainer trainer) {
         if(trainer == null) {
             throw new ForbiddenException("not trainer");
         }
     }
+
+
 
 }

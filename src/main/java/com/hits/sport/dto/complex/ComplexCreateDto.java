@@ -10,7 +10,6 @@ public class ComplexCreateDto {
     private String name;
     private String description;
     private Boolean published;
-    private Boolean common;
     private ComplexType complexType;
     private Integer repetitions;
     private Integer spaceDuration;

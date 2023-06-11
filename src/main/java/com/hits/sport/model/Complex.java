@@ -1,5 +1,6 @@
 package com.hits.sport.model;
 
+import lombok.Data;
 import org.springframework.data.util.Pair;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
+@Data
 public class Complex {
     @Id
     private UUID id;

@@ -6,6 +6,7 @@ import com.hits.sport.dto.exercise.FullExerciseDto;
 import com.hits.sport.dto.exercise.GetExerciseDto;
 import com.hits.sport.dto.exercise.ShortExerciseDto;
 import com.hits.sport.model.CreateExerciseDto;
+import com.hits.sport.model.Trainer;
 
 import java.util.UUID;
 
@@ -15,4 +16,5 @@ public interface ExerciseService {
     FullExerciseDto getExercise(UUID exerciseId);
 
     void createExercise(CreateExerciseDto createExerciseDto);
+    void checkTrainer(Trainer trainer);
 }
