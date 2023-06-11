@@ -21,7 +21,7 @@ public class AddToTrainerQuerySpecification implements Specification<AddToTraine
     @Override
     public Predicate toPredicate(Root<AddToTrainerQuery> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         return criteriaBuilder.and(
-                criteriaBuilder.like(root.get(AddToTrainerQuery_.user).get(User_.name), Utils.toSqlParam(shortName)),
+                criteriaBuilder.like(criteriaBuilder.lower(root.get(AddToTrainerQuery_.user).get(User_.name)), Utils.toSqlParam(shortName)),
                 criteriaBuilder.equal(root.get(AddToTrainerQuery_.trainer), trainer)
         );
     }

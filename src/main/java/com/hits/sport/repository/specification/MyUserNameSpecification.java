@@ -21,7 +21,7 @@ public class MyUserNameSpecification implements Specification<User> {
     @Override
     public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         return criteriaBuilder.and(
-                criteriaBuilder.like(root.get(User_.name), Utils.toSqlParam(name)),
+                criteriaBuilder.like(criteriaBuilder.lower(root.get(User_.name)), Utils.toSqlParam(name)),
                 criteriaBuilder.isMember(trainer, root.get(User_.trainers))
         );
     }
