@@ -26,8 +26,14 @@ public class GroupController {
     private final GroupService groupService;
 
     @PostMapping(GROUP_URL)
-    public GroupDto createGroup(String name, UUID imageId) {
-        return groupService.createGroup(name, imageId);
+    public GroupDto createGroup(String name, String imageId) {
+        UUID image = null;
+        try {
+            image = UUID.fromString(imageId);
+        } catch (Exception e) {
+
+        }
+        return groupService.createGroup(name, image);
     }
 
     @GetMapping(GROUPS_MY_URL)
