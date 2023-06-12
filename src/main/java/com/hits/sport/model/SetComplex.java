@@ -4,28 +4,22 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.util.List;
 import java.util.UUID;
 
 @Data
 @Entity
-public class Training {
+public class SetComplex {
     @Id
     private UUID id;
 
-    private String name;
+    @ManyToOne
+    private Complex complex;
 
-    private String description;
-
-    private Boolean published;
-
-    private Boolean common;
-
-    @ManyToMany
-    private List<SetComplex> complexes;
-
-    private Boolean template;
+    @OneToMany
+    private List<SetExercise> exerciseValues;
 
     public void generate()
     {

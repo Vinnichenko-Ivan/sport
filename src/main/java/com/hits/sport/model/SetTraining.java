@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 import java.util.UUID;
 
 @Entity
-@Data
+@Data//TODO удалить т к заменен
 public class SetTraining {
     @Id
     private UUID id;

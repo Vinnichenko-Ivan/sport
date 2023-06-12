@@ -39,4 +39,11 @@ public class Path {
     public static final String COMPLEX_URL = "/complex/";
     public static final String THE_COMPLEX_URL = COMPLEX_URL + "{complexId}";
     public static final String COMPLEXES_URL = "/complexes/";
+
+    public static final String TRAINING_URL = "/training/";
+    public static final String TRAINING_GET = TRAINING_URL + "{trainingId}";
+    public static final String TRAINING_PUT = TRAINING_URL + "{trainingId}";
+    public static final String TRAINING_GET_APPOINTED = TRAINING_URL + "appointed/";
+    public static final String TRAINING_GET_THIS_APPOINTED = TRAINING_GET_APPOINTED + "{id}";
+    public static final String TRAINING_APPOINT = TRAINING_GET + "/appoint/";
 }
