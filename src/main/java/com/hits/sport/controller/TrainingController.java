@@ -42,21 +42,26 @@ public class TrainingController {
 
     @PutMapping(TRAINING_PUT)
     public void editTraining(@PathVariable UUID trainingId, EditTrainingDto editTrainingDto) {
-        trainingService.editTraining(UUID.randomUUID(), editTrainingDto);
+        trainingService.editTraining(trainingId, editTrainingDto);
     }
 
     @PostMapping(TRAINING_APPOINT)
-    public void appointTraining(@PathVariable UUID trainingId, AppointingTrainingDto appointingTrainingDto) {
-        trainingService.appointTraining(trainingId, appointingTrainingDto);
+    public void appointTraining(@Valid @RequestBody AppointingTrainingDto appointingTrainingDto) {
+        trainingService.appointTraining(appointingTrainingDto);
     }
 
     @GetMapping(TRAINING_GET_APPOINTED)
     public List<ShortAppointedTrainingDto> getMyAppointedTrainings() {
         return trainingService.getMyAppointedTrainings();
     }
+    @GetMapping(TRAINING_GET_APPOINTED + "my-training/")
+    public List<ShortAppointedTrainingDto> getMyAppointingTrainings() {
+        return trainingService.getMyAppointingTrainings();
+    }
 
     @GetMapping(TRAINING_GET_THIS_APPOINTED)
     public FullAppointTrainingDto getAppointTraining(@PathVariable UUID id) {
         return trainingService.getAppointTraining(id);
     }
+
 }

@@ -45,5 +45,5 @@ public class Path {
     public static final String TRAINING_PUT = TRAINING_URL + "{trainingId}";
     public static final String TRAINING_GET_APPOINTED = TRAINING_URL + "appointed/";
     public static final String TRAINING_GET_THIS_APPOINTED = TRAINING_GET_APPOINTED + "{id}";
-    public static final String TRAINING_APPOINT = TRAINING_GET + "/appoint/";
+    public static final String TRAINING_APPOINT = TRAINING_URL + "appoint/";
 }

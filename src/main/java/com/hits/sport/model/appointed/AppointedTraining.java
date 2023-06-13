@@ -1,6 +1,7 @@
 package com.hits.sport.model.appointed;
 
 import com.hits.sport.model.Group;
+import com.hits.sport.model.Trainer;
 import com.hits.sport.model.User;
 import com.hits.sport.model.edited.EditedComplex;
 import com.hits.sport.model.edited.EditedExercise;
@@ -21,9 +22,9 @@ public class AppointedTraining {
     @ElementCollection
     private Set<Date> dates;
 
-    @OneToMany
+    @ManyToMany
     private Set<User> users;
-    @OneToMany
+    @ManyToMany
     private Set<Group> groups;
 
     @OneToMany
@@ -31,6 +32,11 @@ public class AppointedTraining {
 
     @OneToMany
     private List<EditedExercise> editedExercises;
+    @ManyToOne
+    private Trainer trainer;
+
+    private String name;
+    private String description;
 
     @PrePersist
     public void generate()

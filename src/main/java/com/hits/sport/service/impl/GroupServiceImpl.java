@@ -67,11 +67,14 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<ShortGroupDto> myGroups(String name) {
-        var grouuu = groupRepository.findAll();
+        if(name == null) {
+            name = "";
+        }
         User user = jwtProvider.getUser();
+        String finalName = name;
         List<Group> groups = user.getGroups().stream().filter(
                 (group) -> {
-                    return group.getName().toLowerCase().matches("(.*)" + name.toLowerCase() + "(.*)");
+                    return group.getName().toLowerCase().matches("(.*)" + finalName.toLowerCase() + "(.*)");
                 }
         ).collect(Collectors.toList());
         return groups.stream().map(groupMapper::mapToShort).collect(Collectors.toList());
@@ -79,13 +82,17 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<ShortGroupDto> myTrainingGroups(String name) {
+        if(name == null) {
+            name = "";
+        }
         User user = jwtProvider.getUser();
         if(user.getTrainer() == null) {
             throw new BadRequestException("not trainer");
         }
+        String finalName = name;
         return user.getTrainer().getGroups().stream().filter(
                 (group) -> {
-                    Boolean m = group.getName().matches("(.*)" + name + "(.*)");
+                    Boolean m = group.getName().toLowerCase().matches("(.*)" + finalName.toLowerCase() + "(.*)");
                     return m;
                 })
                 .map(groupMapper::mapToShort).collect(Collectors.toList());

@@ -8,22 +8,22 @@ import com.hits.sport.dto.exercise.EditedExerciseAnswer;
 import com.hits.sport.dto.exercise.ExerciseForTemplateDto;
 import com.hits.sport.dto.training.*;
 import com.hits.sport.exception.BadRequestException;
+import com.hits.sport.exception.ForbiddenException;
 import com.hits.sport.exception.NotFoundException;
 import com.hits.sport.exception.NotImplementedException;
 import com.hits.sport.mapper.TrainingMapper;
+import com.hits.sport.model.Group;
+import com.hits.sport.model.User;
+import com.hits.sport.model.appointed.AppointedTraining;
 import com.hits.sport.model.edited.EditedComplex;
 import com.hits.sport.model.edited.EditedExercise;
 import com.hits.sport.model.template.ExerciseTemplate;
 import com.hits.sport.model.template.TrainingTemplate;
-import com.hits.sport.repository.EditedComplexRepository;
-import com.hits.sport.repository.EditedExerciseRepository;
-import com.hits.sport.repository.ExerciseTemplateRepository;
-import com.hits.sport.repository.TrainingRepository;
+import com.hits.sport.repository.*;
 import com.hits.sport.service.ExerciseService;
 import com.hits.sport.service.TrainingService;
 import com.hits.sport.utils.JwtProvider;
 import com.hits.sport.utils.Utils;
-import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -34,10 +34,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,6 +47,9 @@ public class TrainingServiceImpl implements TrainingService {
     private final EditedExerciseRepository editedExerciseRepository;
     private final EditedComplexRepository editedComplexRepository;
     private final ExerciseTemplateRepository exerciseTemplateRepository;
+    private final UserRepository userRepository;
+    private final GroupRepository groupRepository;
+    private final AppointTrainingRepository appointingTrainingRepository;
     @Override
     public PaginationAnswerDto<ShortTrainingDto> getTraining(QueryTrainingDto queryTrainingDto, PaginationQueryDto paginationQueryDto) {
         Page<TrainingTemplate> page = trainingRepository.findAll(new Specification() {
@@ -93,13 +93,6 @@ public class TrainingServiceImpl implements TrainingService {
 
     }
 
-    private EditedExerciseAnswer map(EditedExercise exercise) {
-        EditedExerciseAnswer dto = new EditedExerciseAnswer();
-        dto.setExerciseId(exercise.getId());
-        dto.setOrderNumber(exercise.getOrderNumber());
-        dto.setExerciseValues(exercise.getExerciseValues());
-        return dto;
-    }
     @Override
     @Transactional
     public void createTraining(TrainingCreateDto trainingCreateDto) {
@@ -107,18 +100,21 @@ public class TrainingServiceImpl implements TrainingService {
         TrainingTemplate trainingTemplate = trainingMapper.map(trainingCreateDto);
         trainingTemplate.setTrainer(jwtProvider.getUser().getTrainer());
 
-        trainingTemplate.setEditedExercises(
-                trainingCreateDto.getExercises().stream().map(
-                    this::map
-                ).collect(Collectors.toList()));
-        trainingTemplate.setEditedComplexes(
-                trainingCreateDto.getComplexes().stream().map(
-                        this::map
-                ).collect(Collectors.toList()));
-        checkOrder(
-                trainingTemplate.getEditedExercises().stream().map(EditedExercise::getOrderNumber).collect(Collectors.toList()),
-                trainingTemplate.getEditedComplexes().stream().map(EditedComplex::getOrderNumber).collect(Collectors.toList())
-        );
+        if(trainingCreateDto.getExercises() != null){
+            trainingTemplate.setEditedExercises(
+                    trainingCreateDto.getExercises().stream().map(
+                            this::map
+                    ).collect(Collectors.toList()));
+        }
+        if(trainingCreateDto.getComplexes() != null) {
+            trainingTemplate.setEditedComplexes(
+                    trainingCreateDto.getComplexes().stream().map(
+                            this::map
+                    ).collect(Collectors.toList()));
+        }
+        List<Integer> complexOrder = trainingTemplate.getEditedExercises()!=null?trainingTemplate.getEditedExercises().stream().map(EditedExercise::getOrderNumber).collect(Collectors.toList()):null;
+        List<Integer> exercisesOrder = trainingTemplate.getEditedComplexes()!=null?trainingTemplate.getEditedComplexes().stream().map(EditedComplex::getOrderNumber).collect(Collectors.toList()):null;
+        checkOrder(complexOrder, exercisesOrder);
         trainingRepository.save(trainingTemplate);
     }
 
@@ -128,19 +124,150 @@ public class TrainingServiceImpl implements TrainingService {
     }
 
     @Override
-    public void appointTraining(UUID trainingId, AppointingTrainingDto appointingTrainingDto) {
-        throw new NotImplementedException();
+    public void appointTraining(AppointingTrainingDto appointingTrainingDto) {
+        //TODO проверка доступа]
+        if(jwtProvider.getUser().getTrainer() == null) {
+            throw new ForbiddenException();
+        }
+        List<Integer> complexOrder = appointingTrainingDto.getComplexes()!=null?appointingTrainingDto.getComplexes().stream().map(ComplexEditForTemplateDto::getOrderNumber).collect(Collectors.toList()):null;
+        List<Integer> exercisesOrder = appointingTrainingDto.getExercise()!=null?appointingTrainingDto.getExercise().stream().map(ExerciseForTemplateDto::getOrderNumber).collect(Collectors.toList()):null;
+        checkOrder(complexOrder, exercisesOrder);
+
+        AppointedTraining training = new AppointedTraining();
+        training.setDates(appointingTrainingDto.getDates());
+        training.setTrainer(jwtProvider.getUser().getTrainer());
+        training.setName(appointingTrainingDto.getName());
+        training.setDescription(appointingTrainingDto.getDescription());
+
+        Set<User> users = new HashSet<>();
+        if(appointingTrainingDto.getUserIds() != null) {
+            for(UUID id : appointingTrainingDto.getUserIds()) {
+                User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("user not found" + id.toString()));
+                users.add(user);
+            }
+        }
+
+        training.setUsers(users);
+
+        Set<Group> groups = new HashSet<>();
+        if(appointingTrainingDto.getGroupIds() != null) {
+            for (UUID id : appointingTrainingDto.getGroupIds()) {
+                Group group = groupRepository.findById(id).orElseThrow(() -> new NotFoundException("user not found" + id.toString()));
+                groups.add(group);
+            }
+        }
+        training.setGroups(groups);
+        if(appointingTrainingDto.getExercise() != null) {
+            training.setEditedExercises(appointingTrainingDto.getExercise().stream().map(this::map).collect(Collectors.toList()));
+        }
+        if(appointingTrainingDto.getComplexes() != null) {
+            training.setEditedComplexes(appointingTrainingDto.getComplexes().stream().map(this::map).collect(Collectors.toList()));
+        }
+
+        appointingTrainingRepository.save(training);
     }
 
     @Override
+    @Transactional
     public List<ShortAppointedTrainingDto> getMyAppointedTrainings() {
-        throw new NotImplementedException();
+        User user = jwtProvider.getUser();
+        List<AppointedTraining> trainings = appointingTrainingRepository.getAll();// TODO SQL
+        return trainings.stream().filter(appointedTraining -> {
+            Boolean isNow = true;
+            for(Date date : appointedTraining.getDates()) {
+                if(date.after(new Date(System.currentTimeMillis()))) {
+                    isNow = false;
+                    break;
+                }
+            }
+            if(isNow) {
+                return false;
+            }
+
+            if(appointedTraining.getUsers().contains(user)) {
+                return true;
+            }
+            for(Group group : appointedTraining.getGroups()) {
+                if(group.getUsers().contains(user)) {
+                    return true;
+                }
+            }
+            return false;
+        }).map(this::map).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ShortAppointedTrainingDto> getMyAppointingTrainings() {
+
+        User user = jwtProvider.getUser();
+        if(user.getTrainer() == null) {
+            throw new ForbiddenException("not trainer");//todo ДОСТУП
+        }
+        List<AppointedTraining> trainings = appointingTrainingRepository.getAll();// TODO SQL
+        return trainings.stream().filter(appointedTraining -> {
+            Boolean isNow = true;
+            for(Date date : appointedTraining.getDates()) {
+                if(date.after(new Date(System.currentTimeMillis()))) {
+                    isNow = false;
+                    break;
+                }
+            }
+            if(isNow) {
+                return false;
+            }
+
+            if(appointedTraining.getTrainer().equals(user.getTrainer())) {
+                return true;
+            }
+//            for(Group group : appointedTraining.getGroups()) {//TODO отображение если тренер
+//                if(group.getUsers().contains(user)) {
+//                    return true;
+//                }
+//            }
+            return false;
+        }).map(this::map).collect(Collectors.toList());
     }
 
     @Override
     public FullAppointTrainingDto getAppointTraining(UUID id) {
-        throw new NotImplementedException();
+        AppointedTraining appointedTraining =appointingTrainingRepository.findById(id).orElseThrow(NotFoundException::new);
+        FullAppointTrainingDto dto = new FullAppointTrainingDto();
+        dto.setDescription(appointedTraining.getDescription());
+        dto.setId(appointedTraining.getId());
+        dto.setName(appointedTraining.getName());
+        dto.setTrainerName(appointedTraining.getTrainer().getUser().getName());
+        dto.setDescription(appointedTraining.getDescription());
+        dto.setId(appointedTraining.getId());
+        dto.setComplexes(appointedTraining.getEditedComplexes().stream().map((complex)->{
+            EditedComplexAnswer editedComplexAnswer = new EditedComplexAnswer();
+            editedComplexAnswer.setComplexId(complex.getId());
+            editedComplexAnswer.setOrderNumber(editedComplexAnswer.getOrderNumber());
+            editedComplexAnswer.setExerciseValues(
+                    complex.getEditedExercises().stream().map(this::map).collect(Collectors.toList())
+            );
+            return editedComplexAnswer;
+        }).collect(Collectors.toList()));
+        dto.setExercises(appointedTraining.getEditedExercises().stream().map(this::map).collect(Collectors.toList()));
+        return dto;
     }
+
+    private EditedExerciseAnswer map(EditedExercise editedExercise) {
+        EditedExerciseAnswer dto = new EditedExerciseAnswer();
+        dto.setExerciseValues(editedExercise.getExerciseValues());
+        dto.setOrderNumber(editedExercise.getOrderNumber());
+        dto.setExerciseId(editedExercise.getId());
+        return dto;
+    }
+
+    private ShortAppointedTrainingDto map(AppointedTraining appointedTraining) {
+        ShortAppointedTrainingDto dto = new ShortAppointedTrainingDto();
+        dto.setDates(appointedTraining.getDates());
+        dto.setName(appointedTraining.getName());
+        dto.setTrainerName(appointedTraining.getTrainer().getUser().getName());
+        dto.setId(appointedTraining.getId());
+        return dto;
+    }
+
 
     private EditedExercise map(ExerciseForTemplateDto exercise) {
 
@@ -161,13 +288,30 @@ public class TrainingServiceImpl implements TrainingService {
         editedComplex.setRepetitions(complex.getRepetitions());
         editedComplex.setOrderNumber(complex.getOrderNumber());
         editedComplex.setSpaceDuration(complex.getSpaceDuration());
-        editedComplex.setEditedExercises(complex.getExercises().stream().map(this::map).collect(Collectors.toList()));
+        if(editedComplex.getEditedExercises() != null) {
+            editedComplex.setEditedExercises(complex.getExercises().stream().map(this::map).collect(Collectors.toList()));
+        }
         editedComplex = editedComplexRepository.save(editedComplex);
         return editedComplex;
     }
 
     private void checkOrder(List<Integer> complexOrder, List<Integer> exercisesOrder) {
         int counter = 1;
+
+        if(complexOrder == null) {
+            for (Integer integer : exercisesOrder) {
+                checkCounter(counter, integer);
+                counter++;
+            }
+            return;
+        }
+        if(exercisesOrder == null) {
+            for (Integer integer : complexOrder) {
+                checkCounter(counter, integer);
+                counter++;
+            }
+            return;
+        }
 
         ListIterator<Integer> complex = complexOrder.listIterator();
         ListIterator<Integer> exercises = exercisesOrder.listIterator();
