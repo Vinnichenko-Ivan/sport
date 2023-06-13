@@ -24,8 +24,6 @@ public class FullExerciseDto {
 
     private UUID trainerId;
 
-    private Set<UUID> allowedTrainerId;
-
     private ExerciseValues defaultValues;
 
     private UUID imageId;

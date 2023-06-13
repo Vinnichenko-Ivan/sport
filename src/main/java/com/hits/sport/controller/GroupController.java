@@ -1,8 +1,11 @@
 package com.hits.sport.controller;
 
+import com.hits.sport.dto.group.GroupCreateDto;
 import com.hits.sport.dto.group.GroupDto;
 import com.hits.sport.dto.group.GroupEditDto;
 import com.hits.sport.dto.group.ShortGroupDto;
+import com.hits.sport.dto.trainer.ShortTrainerDto;
+import com.hits.sport.dto.user.ShortUserDto;
 import com.hits.sport.service.GroupService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -67,8 +70,8 @@ public class GroupController {
     }
 
     @GetMapping(GROUP_USERS)
-    public void getUsers(@PathVariable UUID groupId) {
-        groupService.getUsers(groupId);
+    public List<ShortUserDto> getUsers(@PathVariable UUID groupId) {
+        return groupService.getUsers(groupId);
     }
 
     @PostMapping(GROUP_TRAINERS)
@@ -82,7 +85,12 @@ public class GroupController {
     }
 
     @GetMapping(GROUP_TRAINERS)
-    public void getTrainers(@PathVariable UUID groupId) {
-        groupService.getTrainers(groupId);
+    public List<ShortTrainerDto> getTrainers(@PathVariable UUID groupId) {
+        return groupService.getTrainers(groupId);
+    }
+
+    @PostMapping("groupfull")
+    public void createGroup(GroupCreateDto groupCreateDto) {
+        groupService.createGroup(groupCreateDto);
     }
 }

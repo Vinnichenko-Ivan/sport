@@ -34,8 +34,8 @@ public class ComplexController {
     }
 
     @PostMapping(COMPLEXES_URL)
-    PaginationAnswerDto<ShortComplexDto> getComplexes(@Valid @RequestBody QueryComplexDto queryComplexDto, PaginationQueryDto paginationQueryDto) {
-        return complexService.getComplexes(queryComplexDto, paginationQueryDto);
+    PaginationAnswerDto<ShortComplexDto> getComplexes(@Valid @RequestBody QueryComplexDto queryComplexDto) {
+        return complexService.getComplexes(queryComplexDto, queryComplexDto.getPaginationQueryDto());
     }
 
     @PutMapping(THE_COMPLEX_URL)

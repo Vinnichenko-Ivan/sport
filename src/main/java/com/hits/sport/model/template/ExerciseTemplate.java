@@ -1,6 +1,10 @@
-package com.hits.sport.model;
+package com.hits.sport.model.template;
 
 import javax.persistence.*;
+
+import com.hits.sport.model.ExerciseValues;
+import com.hits.sport.model.MuscleGroup;
+import com.hits.sport.model.Trainer;
 import lombok.Data;
 
 import java.util.Set;
@@ -9,7 +13,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "exercise")
-public class Exercise {
+public class ExerciseTemplate {
 
     @Id
     private UUID id;
@@ -29,9 +33,6 @@ public class Exercise {
     @ManyToOne
     @JoinColumn(name = "trainer_id")
     private Trainer trainer;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Set<User> allowedTrainer;
 
     @Embedded
     private ExerciseValues defaultValues;

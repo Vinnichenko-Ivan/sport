@@ -1,5 +1,6 @@
 package com.hits.sport.service.impl;
 
+import com.hits.sport.dto.group.GroupCreateDto;
 import com.hits.sport.dto.group.GroupDto;
 import com.hits.sport.dto.group.GroupEditDto;
 import com.hits.sport.dto.group.ShortGroupDto;
@@ -15,6 +16,7 @@ import com.hits.sport.model.Group;
 import com.hits.sport.model.Trainer;
 import com.hits.sport.model.User;
 import com.hits.sport.repository.GroupRepository;
+import com.hits.sport.repository.TrainerRepository;
 import com.hits.sport.repository.UserRepository;
 import com.hits.sport.service.GroupService;
 import com.hits.sport.utils.JwtProvider;
@@ -38,6 +40,7 @@ public class GroupServiceImpl implements GroupService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final TrainerMapper trainerMapper;
+    private final TrainerRepository trainerRepository;
 
     @Override
     public GroupDto createGroup(String name, UUID imageId) {
@@ -49,19 +52,29 @@ public class GroupServiceImpl implements GroupService {
         Set<Trainer> trainers = new HashSet<>();
         trainers.add(trainer);
         Group group = new Group();
+        group.setUsers(new HashSet<>());
         group.setName(name);
         group.setMainTrainer(trainer);
         group.setTrainers(trainers);
         group.setImageId(imageId);
         group = groupRepository.save(group);
-        return groupMapper.map(group);
+        Trainer temp = trainerRepository.findById(trainer.getId()).orElse(null);
+        var dto = groupMapper.map(group);
+        dto.setTrainerDtos(group.getTrainers().stream().map(trainerMapper::map).collect(Collectors.toSet()));
+        dto.setUsers(group.getUsers().stream().map(userMapper::mapToShort).collect(Collectors.toSet()));
+        return dto;
     }
 
     @Override
     public List<ShortGroupDto> myGroups(String name) {
+        var grouuu = groupRepository.findAll();
         User user = jwtProvider.getUser();
-        return user.getGroups().stream().filter(group -> group.getName().matches(".*" + name + ".*")
-        ).map(groupMapper::mapToShort).collect(Collectors.toList());
+        List<Group> groups = user.getGroups().stream().filter(
+                (group) -> {
+                    return group.getName().toLowerCase().matches("(.*)" + name.toLowerCase() + "(.*)");
+                }
+        ).collect(Collectors.toList());
+        return groups.stream().map(groupMapper::mapToShort).collect(Collectors.toList());
     }
 
     @Override
@@ -70,7 +83,11 @@ public class GroupServiceImpl implements GroupService {
         if(user.getTrainer() == null) {
             throw new BadRequestException("not trainer");
         }
-        return user.getTrainer().getGroups().stream().filter(group -> group.getName().matches(".*" + name + ".*"))
+        return user.getTrainer().getGroups().stream().filter(
+                (group) -> {
+                    Boolean m = group.getName().matches("(.*)" + name + "(.*)");
+                    return m;
+                })
                 .map(groupMapper::mapToShort).collect(Collectors.toList());
     }
 
@@ -106,10 +123,12 @@ public class GroupServiceImpl implements GroupService {
         Group group = groupRepository.findById(groupId).orElseThrow(()->new NotFoundException("group not found"));
         User user = jwtProvider.getUser();
         checkTrainerRules(group, user);
-
+        if(ids == null) {
+            return;
+        }
         for(UUID id:ids) {
             User userToAdd = userRepository.findById(id).orElseThrow(()->new NotFoundException(String.format("User %s not found", id.toString())));
-            if(group.getUsers().contains(user)) {
+            if(group.getUsers().contains(userToAdd)) {
                 throw new BadRequestException(String.format("user %s already in group", id));
             }
             group.getUsers().add(userToAdd);
@@ -122,10 +141,12 @@ public class GroupServiceImpl implements GroupService {
         Group group = groupRepository.findById(groupId).orElseThrow(()->new NotFoundException("group not found"));
         User user = jwtProvider.getUser();
         checkTrainerRules(group, user);
-
+        if(ids == null) {
+            return;
+        }
         for(UUID id:ids) {
             User userToDelete = userRepository.findById(id).orElseThrow(()->new NotFoundException(String.format("User %s not found", id.toString())));
-            if(!group.getUsers().contains(user)) {
+            if(!group.getUsers().contains(userToDelete)) {
                 throw new BadRequestException(String.format("user %s already in group", id));
             }
             group.getUsers().remove(userToDelete);
@@ -146,7 +167,9 @@ public class GroupServiceImpl implements GroupService {
         Group group = groupRepository.findById(groupId).orElseThrow(()->new NotFoundException("group not found"));
         User user = jwtProvider.getUser();
         checkMainTrainerRules(group, user);
-
+        if(ids == null) {
+            return;
+        }
         for(UUID id:ids) {
             User userToAdd = userRepository.findById(id).orElseThrow(()->new NotFoundException(String.format("User %s not found", id.toString())));
             if(userToAdd.getTrainer() == null) {
@@ -165,7 +188,9 @@ public class GroupServiceImpl implements GroupService {
         Group group = groupRepository.findById(groupId).orElseThrow(()->new NotFoundException("group not found"));
         User user = jwtProvider.getUser();
         checkMainTrainerRules(group, user);
-
+        if(ids == null) {
+            return;
+        }
         for(UUID id:ids) {
             User userToDelete = userRepository.findById(id).orElseThrow(()->new NotFoundException(String.format("User %s not found", id.toString())));
             if(userToDelete.getTrainer() == null) {
@@ -220,5 +245,26 @@ public class GroupServiceImpl implements GroupService {
         if(!group.getUsers().contains(user)) {
             throw new ForbiddenException("not allowed");
         }
+    }
+
+    @Override
+    @Transactional
+    public void createGroup(GroupCreateDto groupCreateDto) {
+        User user = jwtProvider.getUser();
+        Trainer trainer = user.getTrainer();
+        if(trainer == null) {
+            throw new ForbiddenException("not trainer");
+        }
+        Set<Trainer> trainers = new HashSet<>();
+        trainers.add(trainer);
+        Group group = new Group();
+        group.setUsers(new HashSet<>());
+        group.setName(groupCreateDto.getName());
+        group.setMainTrainer(trainer);
+        group.setTrainers(trainers);
+        group = groupRepository.save(group);
+
+        addTrainers(group.getId(), groupCreateDto.getTrainers());
+        addUsers(group.getId(), groupCreateDto.getUsers());
     }
 }

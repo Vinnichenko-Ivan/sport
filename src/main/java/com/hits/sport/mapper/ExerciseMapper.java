@@ -3,7 +3,7 @@ package com.hits.sport.mapper;
 import com.hits.sport.dto.exercise.FullExerciseDto;
 import com.hits.sport.dto.exercise.ShortExerciseDto;
 import com.hits.sport.model.CreateExerciseDto;
-import com.hits.sport.model.Exercise;
+import com.hits.sport.model.template.ExerciseTemplate;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -12,12 +12,10 @@ public interface ExerciseMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "common", ignore = true)
     @Mapping(target = "trainer", ignore = true)
-    @Mapping(target = "allowedTrainer", ignore = true)
-    Exercise map(CreateExerciseDto createExerciseDto);
+    ExerciseTemplate map(CreateExerciseDto createExerciseDto);
 
-    @Mapping(target = "allowedTrainerId", ignore = true)
     @Mapping(target = "trainerId", source = "trainer.id")
-    FullExerciseDto map(Exercise exercise);
+    FullExerciseDto map(ExerciseTemplate exerciseTemplate);
 
-    ShortExerciseDto mapToShort(Exercise exercise);
+    ShortExerciseDto mapToShort(ExerciseTemplate exerciseTemplate);
 }

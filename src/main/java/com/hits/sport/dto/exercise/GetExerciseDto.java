@@ -1,5 +1,6 @@
 package com.hits.sport.dto.exercise;
 
+import com.hits.sport.dto.common.PaginationQueryDto;
 import com.hits.sport.model.MuscleGroup;
 import lombok.Data;
 
@@ -12,4 +13,5 @@ public class GetExerciseDto {
     private Boolean common;
     private Boolean my;
     private Boolean shared;
+    private PaginationQueryDto paginationQueryDto;
 }

@@ -1,16 +1,17 @@
-package com.hits.sport.model;
+package com.hits.sport.model.template;
 
+import com.hits.sport.model.ComplexType;
+import com.hits.sport.model.Trainer;
+import com.hits.sport.model.edited.EditedExercise;
 import lombok.Data;
-import org.springframework.data.util.Pair;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Data
-public class Complex {
+public class ComplexTemplate {
     @Id
     private UUID id;
 
@@ -26,22 +27,15 @@ public class Complex {
     @JoinColumn(name = "trainer_id")
     private Trainer trainer;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Set<User> allowedTrainer;
-
-    @OneToMany(mappedBy = "complex")
-    private List<SetExercise> exerciseValues;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Set<User> liked;
-
     @Enumerated(EnumType.STRING)
     private ComplexType complexType;
 
     private Integer repetitions;
     private Integer spaceDuration;
 
-    private Boolean template;
+    @OneToMany
+    private List<EditedExercise> editedExercises;
+
     @PrePersist
     public void generate()
     {

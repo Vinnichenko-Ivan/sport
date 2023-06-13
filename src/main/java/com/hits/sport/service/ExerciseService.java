@@ -12,9 +12,7 @@ import java.util.UUID;
 
 public interface ExerciseService {
     PaginationAnswerDto<ShortExerciseDto> getExercise(GetExerciseDto getExerciseDto, PaginationQueryDto paginationQueryDto);
-
     FullExerciseDto getExercise(UUID exerciseId);
-
     void createExercise(CreateExerciseDto createExerciseDto);
     void checkTrainer(Trainer trainer);
 }

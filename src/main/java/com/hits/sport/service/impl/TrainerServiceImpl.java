@@ -25,6 +25,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -88,27 +89,27 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-    @Transactional
     public void acceptQuery(UUID queryId) {
         setQueryStatus(queryId, true);
     }
 
     @Override
-    @Transactional
+
     public void rejectQuery(UUID queryId) {
         setQueryStatus(queryId, false);
     }
 
-    private void setQueryStatus(UUID queryId, Boolean isAccept) {
-        UUID id = jwtProvider.getId();
+    @Transactional
+    public void setQueryStatus(UUID queryId, Boolean isAccept) {
+        UUID id = jwtProvider.getId();//62851366-2b94-4262-8511-6ea3cbf524d2,2023-06-13 09:56:14.092000,75bfd167-4cfa-4fc7-a9ff-832ddeaf79c8,aa31d535-5754-4568-bbe3-d44faf1fccee
         AddToTrainerQuery query = addToTrainerQueryRepository.findById(queryId).orElseThrow(()->new NotFoundException("query not found"));
         Trainer trainer = query.getTrainer();
         if(!trainer.getId().equals(id)) {
             throw new NotFoundException("query not found");
         }
         if(isAccept) {
-            trainer.getUsers().add(query.getUser());
-            trainerRepository.save(trainer);
+            query.getUser().getTrainers().add(query.getTrainer());
+            userRepository.save(query.getUser());
         }
         addToTrainerQueryRepository.delete(query);
     }
@@ -120,7 +121,6 @@ public class TrainerServiceImpl implements TrainerService {
         if(trainer == null) {
             throw new ForbiddenException("not trainer");
         }
-
         Page<User> page = userRepository.findAll(new MyUserNameSpecification(trainer, name), Utils.toPageable(paginationQueryDto));
         PaginationAnswerDto<ShortUserDto> dto = Utils.toAnswerWData(page);
         dto.setData(

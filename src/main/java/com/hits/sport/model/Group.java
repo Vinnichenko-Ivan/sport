@@ -16,14 +16,13 @@ public class Group {
 
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups")
+    @ManyToMany
     private Set<Trainer> trainers;
 
     @ManyToOne
-    @JoinColumn(name = "main_trainer_id")
     private Trainer mainTrainer;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups")
+    @ManyToMany
     private Set<User> users;
 
     private UUID imageId;

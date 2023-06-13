@@ -1,5 +1,6 @@
 package com.hits.sport.service;
 
+import com.hits.sport.dto.group.GroupCreateDto;
 import com.hits.sport.dto.group.GroupDto;
 import com.hits.sport.dto.group.GroupEditDto;
 import com.hits.sport.dto.group.ShortGroupDto;
@@ -31,4 +32,6 @@ public interface GroupService {
     void deleteTrainers(UUID groupId, Set<UUID> ids);
 
     List<ShortTrainerDto> getTrainers(UUID groupId);
+
+    void createGroup(GroupCreateDto groupCreateDto);
 }

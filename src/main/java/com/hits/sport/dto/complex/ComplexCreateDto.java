@@ -13,6 +13,5 @@ public class ComplexCreateDto {
     private ComplexType complexType;
     private Integer repetitions;
     private Integer spaceDuration;
-    private Boolean template;
     private List<SetExerciseDto> exercises;
 }

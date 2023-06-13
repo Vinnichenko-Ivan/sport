@@ -25,9 +25,9 @@ import static com.hits.sport.utils.Path.*;
 @Validated
 public class TrainingController {
     private final TrainingService trainingService;
-    @GetMapping(TRAINING_URL)
-    public PaginationAnswerDto<ShortTrainingDto> getTraining(QueryTrainingDto queryTrainingDto, PaginationQueryDto paginationQueryDto) {
-        return trainingService.getTraining(queryTrainingDto, paginationQueryDto);
+    @PostMapping("/trainings/")
+    public PaginationAnswerDto<ShortTrainingDto> getTraining(@Valid @RequestBody QueryTrainingDto queryTrainingDto) {
+        return trainingService.getTraining(queryTrainingDto, queryTrainingDto.getPaginationQueryDto());
     }
 
     @GetMapping(TRAINING_GET)

@@ -4,16 +4,16 @@ import com.hits.sport.dto.complex.ComplexCreateDto;
 import com.hits.sport.dto.complex.EditComplexDto;
 import com.hits.sport.dto.complex.FullComplexDto;
 import com.hits.sport.dto.complex.ShortComplexDto;
-import com.hits.sport.model.Complex;
+import com.hits.sport.model.template.ComplexTemplate;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface ComplexMapper {
-    Complex map(ComplexCreateDto complexCreateDto);
+    ComplexTemplate map(ComplexCreateDto complexCreateDto);
 
-    ShortComplexDto mapToShort(Complex complex);
-    FullComplexDto map(Complex complex);
+    ShortComplexDto mapToShort(ComplexTemplate complexTemplate);
+    FullComplexDto map(ComplexTemplate complexTemplate);
 
-    void map(@MappingTarget Complex complex, EditComplexDto editComplexDto);
+    void map(@MappingTarget ComplexTemplate complexTemplate, EditComplexDto editComplexDto);
 }

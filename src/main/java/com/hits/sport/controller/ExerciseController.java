@@ -26,8 +26,8 @@ import static com.hits.sport.utils.Path.*;
 public class ExerciseController {
     private final ExerciseService exerciseService;
     @PostMapping(EXERCISES_URL)
-    public PaginationAnswerDto<ShortExerciseDto> getExercise(@Valid @RequestBody GetExerciseDto getExerciseDto, @Valid @RequestBody PaginationQueryDto paginationQueryDto) {
-        return exerciseService.getExercise(getExerciseDto, paginationQueryDto);
+    public PaginationAnswerDto<ShortExerciseDto> getExercise(@Valid @RequestBody GetExerciseDto getExerciseDto) {
+        return exerciseService.getExercise(getExerciseDto, getExerciseDto.getPaginationQueryDto());
     }
 
     @GetMapping(EXERCISE_GET)
