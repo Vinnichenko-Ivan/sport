@@ -269,9 +269,16 @@ public class GroupServiceImpl implements GroupService {
         group.setName(groupCreateDto.getName());
         group.setMainTrainer(trainer);
         group.setTrainers(trainers);
+        group.setDescription(groupCreateDto.getDescription());
         group = groupRepository.save(group);
 
         addTrainers(group.getId(), groupCreateDto.getTrainers());
         addUsers(group.getId(), groupCreateDto.getUsers());
+    }
+
+    @Override
+    public GroupDto getGroup(UUID groupId) {
+        Group group = groupRepository.findById(groupId).orElseThrow(()->new NotFoundException("group not found"));
+        return groupMapper.map(group);
     }
 }

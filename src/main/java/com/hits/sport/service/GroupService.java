@@ -6,6 +6,7 @@ import com.hits.sport.dto.group.GroupEditDto;
 import com.hits.sport.dto.group.ShortGroupDto;
 import com.hits.sport.dto.trainer.ShortTrainerDto;
 import com.hits.sport.dto.user.ShortUserDto;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Set;
@@ -34,4 +35,6 @@ public interface GroupService {
     List<ShortTrainerDto> getTrainers(UUID groupId);
 
     void createGroup(GroupCreateDto groupCreateDto);
+
+    GroupDto getGroup(UUID groupId);
 }

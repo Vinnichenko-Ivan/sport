@@ -14,4 +14,5 @@ public class GroupDto {
     private Set<ShortUserDto> users;
     private Set<ShortTrainerDto> trainerDtos;
     private ShortTrainerDto mainTrainer;
+    private String description;
 }

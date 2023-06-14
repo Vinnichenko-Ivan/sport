@@ -54,6 +54,11 @@ public class GroupController {
         return groupService.editGroup(groupId, groupEditDto);
     }
 
+    @GetMapping(GROUP_EDIT_URL)
+    public GroupDto getGroup(@PathVariable UUID groupId) {
+        return groupService.getGroup(groupId);
+    }
+
     @DeleteMapping(GROUP_EDIT_URL)
     public void deleteGroup(@PathVariable UUID groupId) {
         groupService.deleteGroup(groupId);
@@ -90,7 +95,7 @@ public class GroupController {
     }
 
     @PostMapping("groupfull")
-    public void createGroup(GroupCreateDto groupCreateDto) {
+    public void createGroup(@Valid @RequestBody GroupCreateDto groupCreateDto) {
         groupService.createGroup(groupCreateDto);
     }
 }

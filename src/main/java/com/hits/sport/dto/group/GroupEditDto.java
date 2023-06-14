@@ -9,4 +9,5 @@ public class GroupEditDto {
     private String name;
     private UUID mainTrainer;
     private UUID imageId;
+    private String description;
 }

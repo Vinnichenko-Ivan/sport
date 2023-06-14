@@ -13,6 +13,7 @@ public class Group {
 
     @Id
     private UUID id;
+    private String description;
 
     private String name;
 
