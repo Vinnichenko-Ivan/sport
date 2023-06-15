@@ -58,11 +58,7 @@ public class GroupServiceImpl implements GroupService {
         group.setTrainers(trainers);
         group.setImageId(imageId);
         group = groupRepository.save(group);
-        Trainer temp = trainerRepository.findById(trainer.getId()).orElse(null);
-        var dto = groupMapper.map(group);
-        dto.setTrainerDtos(group.getTrainers().stream().map(trainerMapper::map).collect(Collectors.toSet()));
-        dto.setUsers(group.getUsers().stream().map(userMapper::mapToShort).collect(Collectors.toSet()));
-        return dto;
+        return map(groupMapper.map(group), group);
     }
 
     @Override
@@ -113,7 +109,7 @@ public class GroupServiceImpl implements GroupService {
             group.setMainTrainer(trainer.getTrainer());
         }
         group = groupRepository.save(group);
-        return groupMapper.map(group);
+        return map(groupMapper.map(group), group);
     }
 
     @Override
@@ -279,6 +275,13 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupDto getGroup(UUID groupId) {
         Group group = groupRepository.findById(groupId).orElseThrow(()->new NotFoundException("group not found"));
-        return groupMapper.map(group);
+        return map(groupMapper.map(group), group);
+    }
+
+    private GroupDto map(GroupDto dto, Group group) {
+        dto.setMainTrainer(trainerMapper.map(group.getMainTrainer()));
+        dto.setTrainerDtos(group.getTrainers().stream().map(trainerMapper::map).collect(Collectors.toSet()));
+        dto.setUsers(group.getUsers().stream().map(userMapper::mapToShort).collect(Collectors.toSet()));
+        return dto;
     }
 }
