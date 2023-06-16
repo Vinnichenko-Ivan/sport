@@ -1,9 +1,6 @@
 package com.hits.sport.controller;
 
-import com.hits.sport.dto.group.GroupCreateDto;
-import com.hits.sport.dto.group.GroupDto;
-import com.hits.sport.dto.group.GroupEditDto;
-import com.hits.sport.dto.group.ShortGroupDto;
+import com.hits.sport.dto.group.*;
 import com.hits.sport.dto.trainer.ShortTrainerDto;
 import com.hits.sport.dto.user.ShortUserDto;
 import com.hits.sport.service.GroupService;
@@ -97,5 +94,9 @@ public class GroupController {
     @PostMapping("groupfull")
     public void createGroup(@Valid @RequestBody GroupCreateDto groupCreateDto) {
         groupService.createGroup(groupCreateDto);
+    }
+    @PutMapping("groupfull/{groupId}")
+    GroupDto editFullGroup(@PathVariable UUID groupId, @Valid @RequestBody GroupFullEditDto groupEditDto) {
+        return groupService.editFullGroup(groupId, groupEditDto);
     }
 }

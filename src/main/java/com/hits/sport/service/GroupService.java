@@ -1,9 +1,6 @@
 package com.hits.sport.service;
 
-import com.hits.sport.dto.group.GroupCreateDto;
-import com.hits.sport.dto.group.GroupDto;
-import com.hits.sport.dto.group.GroupEditDto;
-import com.hits.sport.dto.group.ShortGroupDto;
+import com.hits.sport.dto.group.*;
 import com.hits.sport.dto.trainer.ShortTrainerDto;
 import com.hits.sport.dto.user.ShortUserDto;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,4 +34,6 @@ public interface GroupService {
     void createGroup(GroupCreateDto groupCreateDto);
 
     GroupDto getGroup(UUID groupId);
+
+    GroupDto editFullGroup(UUID groupId, GroupFullEditDto groupEditDto);
 }

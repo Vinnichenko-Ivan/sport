@@ -1,9 +1,6 @@
 package com.hits.sport.service.impl;
 
-import com.hits.sport.dto.group.GroupCreateDto;
-import com.hits.sport.dto.group.GroupDto;
-import com.hits.sport.dto.group.GroupEditDto;
-import com.hits.sport.dto.group.ShortGroupDto;
+import com.hits.sport.dto.group.*;
 import com.hits.sport.dto.trainer.ShortTrainerDto;
 import com.hits.sport.dto.user.ShortUserDto;
 import com.hits.sport.exception.BadRequestException;
@@ -101,6 +98,7 @@ public class GroupServiceImpl implements GroupService {
         checkMainTrainerRules(group, user);
         group.setName(groupEditDto.getName());
         group.setImageId(groupEditDto.getImageId());
+        group.setDescription(groupEditDto.getDescription());
         if(groupEditDto.getMainTrainer() != null) {
             User trainer = userRepository.findById(groupEditDto.getMainTrainer()).orElseThrow(()->new NotFoundException("trainer not found"));
             if(trainer.getTrainer() == null) {
@@ -109,6 +107,39 @@ public class GroupServiceImpl implements GroupService {
             group.setMainTrainer(trainer.getTrainer());
         }
         group = groupRepository.save(group);
+        return map(groupMapper.map(group), group);
+    }
+
+    @Override
+    public GroupDto editFullGroup(UUID groupId, GroupFullEditDto groupEditDto) {
+        Group group = groupRepository.findById(groupId).orElseThrow(()->new NotFoundException("group not found"));
+        User user = jwtProvider.getUser();
+        checkMainTrainerRules(group, user);
+        group.setName(groupEditDto.getName());
+        group.setImageId(groupEditDto.getImageId());
+        group.setDescription(groupEditDto.getDescription());
+        if(groupEditDto.getMainTrainer() != null) {
+            User trainer = userRepository.findById(groupEditDto.getMainTrainer()).orElseThrow(()->new NotFoundException("trainer not found"));
+            if(trainer.getTrainer() == null) {
+                throw new NotFoundException("trainer not found");
+            }
+            group.setMainTrainer(trainer.getTrainer());
+        }
+        group = groupRepository.save(group);
+
+        Set<Trainer> trainers = new HashSet<>();
+        for(UUID id:groupEditDto.getTrainers()) {
+            Trainer trainerToAdd = trainerRepository.findById(id).orElseThrow(()->new NotFoundException(String.format("User %s not found", id.toString())));
+            trainers.add(trainerToAdd);
+        }
+        group.setTrainers(trainers);
+
+        Set<User> users = new HashSet<>();
+        for(UUID id:groupEditDto.getTrainers()) {
+            User userToAdd = userRepository.findById(id).orElseThrow(()->new NotFoundException(String.format("User %s not found", id.toString())));
+            users.add(userToAdd);
+        }
+        group.setUsers(users);
         return map(groupMapper.map(group), group);
     }
 
