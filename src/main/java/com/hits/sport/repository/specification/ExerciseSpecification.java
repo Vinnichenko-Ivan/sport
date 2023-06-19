@@ -1,6 +1,7 @@
 package com.hits.sport.repository.specification;
 
 import com.hits.sport.dto.exercise.GetExerciseDto;
+import com.hits.sport.model.template.ComplexTemplate_;
 import com.hits.sport.model.template.ExerciseTemplate;
 import com.hits.sport.model.Trainer;
 import com.hits.sport.model.template.ExerciseTemplate_;
@@ -26,7 +27,7 @@ public class ExerciseSpecification implements Specification<ExerciseTemplate> {
         for(var group : getExerciseDto.getMuscleGroups()) {
             def = criteriaBuilder.or(
                     def,
-                    criteriaBuilder.equal(root.get(ExerciseTemplate_.muscleGroups), group)
+                    criteriaBuilder.isMember(group, root.get(ExerciseTemplate_.muscleGroups))
             );
         }
         return def;
@@ -34,7 +35,7 @@ public class ExerciseSpecification implements Specification<ExerciseTemplate> {
     @Override
     public Predicate toPredicate(Root<ExerciseTemplate> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         Predicate base = criteriaBuilder.like(criteriaBuilder.lower(root.get(ExerciseTemplate_.name)), Utils.toSqlParam(getExerciseDto.getName()));
-        if(getExerciseDto.getMuscleGroups() != null) {
+        if(getExerciseDto.getMuscleGroups() != null && !getExerciseDto.getMuscleGroups().isEmpty()) {
             base = criteriaBuilder.and(
                     base,
                     toPredict(root, query, criteriaBuilder)
@@ -43,7 +44,9 @@ public class ExerciseSpecification implements Specification<ExerciseTemplate> {
         Predicate type = criteriaBuilder.or(
                 getExerciseDto.getCommon()?criteriaBuilder.equal(root.get(ExerciseTemplate_.common), true):criteriaBuilder.or(),//TODO shared and liked
                 getExerciseDto.getPublished()?criteriaBuilder.equal(root.get(ExerciseTemplate_.published), true):criteriaBuilder.or(),
-                getExerciseDto.getMy()&&trainer != null?criteriaBuilder.equal(root.get(ExerciseTemplate_.trainer), trainer):criteriaBuilder.or()
+                getExerciseDto.getMy()&&trainer != null?criteriaBuilder.equal(root.get(ExerciseTemplate_.trainer), trainer):criteriaBuilder.or(),
+                getExerciseDto.getLiked()&&trainer != null?criteriaBuilder.isMember(trainer, root.get(ExerciseTemplate_.liked)):criteriaBuilder.or(),
+                getExerciseDto.getShared()&&trainer != null?criteriaBuilder.isMember(trainer, root.get(ExerciseTemplate_.allowed)):criteriaBuilder.or()
         );
         base = criteriaBuilder.and(
                 base,

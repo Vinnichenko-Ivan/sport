@@ -1,6 +1,5 @@
 package com.hits.sport.service;
 
-import com.hits.sport.model.Token;
 import com.hits.sport.model.User;
 import org.springframework.scheduling.annotation.Async;
 

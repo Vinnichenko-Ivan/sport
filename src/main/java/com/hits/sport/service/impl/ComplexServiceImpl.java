@@ -5,6 +5,7 @@ import com.hits.sport.dto.common.PaginationQueryDto;
 import com.hits.sport.dto.complex.*;
 import com.hits.sport.exception.NotFoundException;
 import com.hits.sport.mapper.ComplexMapper;
+import com.hits.sport.model.Trainer;
 import com.hits.sport.model.edited.EditedExercise;
 import com.hits.sport.model.template.ComplexTemplate;
 import com.hits.sport.repository.ComplexRepository;
@@ -69,7 +70,8 @@ public class ComplexServiceImpl implements ComplexService {
     @Override
     public PaginationAnswerDto<ShortComplexDto> getComplexes(QueryComplexDto queryComplexDto, PaginationQueryDto paginationQueryDto) {
         exerciseService.checkTrainer(jwtProvider.getUser().getTrainer());
-        Page<ComplexTemplate> page = complexRepository.findAll(new ComplexSpecification(queryComplexDto), Utils.toPageable(paginationQueryDto));
+        Trainer trainer = jwtProvider.getUser().getTrainer();
+        Page<ComplexTemplate> page = complexRepository.findAll(new ComplexSpecification(queryComplexDto, trainer), Utils.toPageable(paginationQueryDto));
         PaginationAnswerDto<ShortComplexDto> dto = Utils.toAnswer(page, (complex) -> {
             ShortComplexDto complexDto = complexMapper.mapToShort(complex);
             return complexDto;

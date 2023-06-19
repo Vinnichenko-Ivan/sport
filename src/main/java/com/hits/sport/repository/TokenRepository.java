@@ -1,7 +1,7 @@
 package com.hits.sport.repository;
 
-import com.hits.sport.model.Token;
-import com.hits.sport.model.TokenType;
+import com.hits.sport.model.token.Token;
+import com.hits.sport.model.token.TokenType;
 import com.hits.sport.model.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

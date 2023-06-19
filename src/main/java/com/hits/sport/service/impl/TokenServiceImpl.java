@@ -1,8 +1,8 @@
 package com.hits.sport.service.impl;
 
 import com.hits.sport.exception.BadRequestException;
-import com.hits.sport.model.Token;
-import com.hits.sport.model.TokenType;
+import com.hits.sport.model.token.Token;
+import com.hits.sport.model.token.TokenType;
 import com.hits.sport.model.User;
 import com.hits.sport.repository.TokenRepository;
 import com.hits.sport.service.TokenService;
@@ -60,7 +60,8 @@ public class TokenServiceImpl implements TokenService {
         tokenRepository.deleteAll(tokenRepository.findAllByUserAndType(user, type));
     }
 
-    private String generateToken(Boolean alphabet, int size) {
+    @Override
+    public String generateToken(Boolean alphabet, int size) {
         String alphabetsInUpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String alphabetsInLowerCase = "abcdefghijklmnopqrstuvwxyz";
         String numbers = "0123456789";

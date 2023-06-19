@@ -20,6 +20,7 @@ import com.hits.sport.model.edited.EditedExercise;
 import com.hits.sport.model.template.ExerciseTemplate;
 import com.hits.sport.model.template.TrainingTemplate;
 import com.hits.sport.repository.*;
+import com.hits.sport.repository.specification.TrainingSpecification;
 import com.hits.sport.service.ExerciseService;
 import com.hits.sport.service.TrainingService;
 import com.hits.sport.utils.JwtProvider;
@@ -52,12 +53,7 @@ public class TrainingServiceImpl implements TrainingService {
     private final AppointTrainingRepository appointingTrainingRepository;
     @Override
     public PaginationAnswerDto<ShortTrainingDto> getTraining(QueryTrainingDto queryTrainingDto, PaginationQueryDto paginationQueryDto) {
-        Page<TrainingTemplate> page = trainingRepository.findAll(new Specification() {
-            @Override
-            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.and();
-            }
-        }, Utils.toPageable(paginationQueryDto));
+        Page<TrainingTemplate> page = trainingRepository.findAll(new TrainingSpecification(queryTrainingDto, jwtProvider.getUser().getTrainer()), Utils.toPageable(paginationQueryDto));
 
         return Utils.toAnswer(page,
                 (training) -> {

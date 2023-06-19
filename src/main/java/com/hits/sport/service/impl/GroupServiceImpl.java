@@ -86,7 +86,7 @@ public class GroupServiceImpl implements GroupService {
         return user.getTrainer().getGroups().stream().filter(
                 (group) -> {
                     Boolean m = group.getName().toLowerCase().matches("(.*)" + finalName.toLowerCase() + "(.*)");
-                    return m;
+                    return m && group.getTrainers().contains(jwtProvider.getUser().getTrainer());
                 })
                 .map(groupMapper::mapToShort).collect(Collectors.toList());
     }

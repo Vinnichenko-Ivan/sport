@@ -6,7 +6,9 @@ import com.hits.sport.model.edited.EditedExercise;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -36,6 +38,11 @@ public class ComplexTemplate {
     @OneToMany
     private List<EditedExercise> editedExercises;
 
+    @ManyToMany
+    private Set<Trainer> allowed = new HashSet<>();
+
+    @ManyToMany
+    private Set<Trainer> liked = new HashSet<>();
     @PrePersist
     public void generate()
     {

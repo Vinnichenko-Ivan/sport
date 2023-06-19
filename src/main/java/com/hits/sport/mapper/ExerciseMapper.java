@@ -24,5 +24,6 @@ public interface ExerciseMapper {
     @Mapping(target = "trainerId", source = "trainer.id")
     FullExerciseDto map(ExerciseTemplate exerciseTemplate);
 
+    @Mapping(target = "muscleGroup", source = "muscleGroups")
     ShortExerciseDto mapToShort(ExerciseTemplate exerciseTemplate);
 }

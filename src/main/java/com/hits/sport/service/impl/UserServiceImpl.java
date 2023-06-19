@@ -8,7 +8,7 @@ import com.hits.sport.dto.user.UserDto;
 import com.hits.sport.exception.AuthException;
 import com.hits.sport.exception.BadRequestException;
 import com.hits.sport.mapper.UserMapper;
-import com.hits.sport.model.TokenType;
+import com.hits.sport.model.token.TokenType;
 import com.hits.sport.model.Trainer;
 import com.hits.sport.model.User;
 import com.hits.sport.repository.UserRepository;

@@ -7,6 +7,8 @@ import com.hits.sport.model.MuscleGroup;
 import com.hits.sport.model.Trainer;
 import lombok.Data;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -39,6 +41,11 @@ public class ExerciseTemplate {
 
     private UUID imageId;
 
+    @ManyToMany
+    private Set<Trainer> allowed = new HashSet<>();
+
+    @ManyToMany
+    private Set<Trainer> liked = new HashSet<>();
     @PrePersist
     public void generate()
     {

@@ -1,5 +1,6 @@
-package com.hits.sport.model;
+package com.hits.sport.model.token;
 
+import com.hits.sport.model.User;
 import lombok.Data;
 
 import javax.persistence.*;

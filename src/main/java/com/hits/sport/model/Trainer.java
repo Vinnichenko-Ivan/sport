@@ -33,9 +33,6 @@ public class Trainer {
     @ManyToMany(mappedBy = "trainers")
     private Set<Group> groups = new HashSet<>();
 
-    @ManyToMany
-    private Set<ExerciseTemplate> allowedExerciseTemplate;
-
     @OneToMany
     private Set<ExerciseTemplate> myExerciseTemplate;
 
@@ -59,7 +56,7 @@ public class Trainer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Trainer trainer = (Trainer) o;
-        return Objects.equals(id, trainer.id) && Objects.equals(user, trainer.user) && Objects.equals(users, trainer.users) && Objects.equals(groups, trainer.groups) && Objects.equals(allowedExerciseTemplate, trainer.allowedExerciseTemplate) && Objects.equals(myExerciseTemplate, trainer.myExerciseTemplate) && Objects.equals(trainingTemplates, trainer.trainingTemplates) && Objects.equals(shortName, trainer.shortName);
+        return Objects.equals(id, trainer.id) && Objects.equals(user, trainer.user) && Objects.equals(users, trainer.users) && Objects.equals(groups, trainer.groups) && Objects.equals(myExerciseTemplate, trainer.myExerciseTemplate) && Objects.equals(trainingTemplates, trainer.trainingTemplates) && Objects.equals(shortName, trainer.shortName);
     }
 
     @Override
