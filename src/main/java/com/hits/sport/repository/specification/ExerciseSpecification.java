@@ -3,6 +3,7 @@ package com.hits.sport.repository.specification;
 import com.hits.sport.dto.exercise.GetExerciseDto;
 import com.hits.sport.model.template.ExerciseTemplate;
 import com.hits.sport.model.Trainer;
+import com.hits.sport.model.template.ExerciseTemplate_;
 import com.hits.sport.utils.Utils;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -21,35 +22,33 @@ public class ExerciseSpecification implements Specification<ExerciseTemplate> {
     }
 
     private Predicate toPredict(Root<ExerciseTemplate> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-//        Predicate def = criteriaBuilder.or();
-//        for(var group : getExerciseDto.getMuscleGroups()) {
-//            def = criteriaBuilder.or(
-//                    def,
-//                    criteriaBuilder.equal(root.get(Exercise_.muscleGroups), group)
-//            );
-//        }
-//        return def;
-        return criteriaBuilder.or();
+        Predicate def = criteriaBuilder.or();
+        for(var group : getExerciseDto.getMuscleGroups()) {
+            def = criteriaBuilder.or(
+                    def,
+                    criteriaBuilder.equal(root.get(ExerciseTemplate_.muscleGroups), group)
+            );
+        }
+        return def;
     }
     @Override
     public Predicate toPredicate(Root<ExerciseTemplate> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-//        Predicate base = criteriaBuilder.like(criteriaBuilder.lower(root.get(Exercise_.name)), Utils.toSqlParam(getExerciseDto.getName()));
-//        if(getExerciseDto.getMuscleGroups() != null) {
-//            base = criteriaBuilder.and(
-//                    base,
-//                    toPredict(root, query, criteriaBuilder)
-//            );
-//        }
-//        Predicate type = criteriaBuilder.or(
-//                getExerciseDto.getCommon()?criteriaBuilder.equal(root.get(Exercise_.common), true):criteriaBuilder.or(),
-//                getExerciseDto.getShared()?criteriaBuilder.equal(root.get(Exercise_.published), true):criteriaBuilder.or(),//TODO shared
-//                getExerciseDto.getMy()&&trainer != null?criteriaBuilder.equal(root.get(Exercise_.trainer), trainer):criteriaBuilder.or()
-//        );
-//        base = criteriaBuilder.and(
-//                base,
-//                type
-//        );
-//        return base;
-        return criteriaBuilder.and();
+        Predicate base = criteriaBuilder.like(criteriaBuilder.lower(root.get(ExerciseTemplate_.name)), Utils.toSqlParam(getExerciseDto.getName()));
+        if(getExerciseDto.getMuscleGroups() != null) {
+            base = criteriaBuilder.and(
+                    base,
+                    toPredict(root, query, criteriaBuilder)
+            );
+        }
+        Predicate type = criteriaBuilder.or(
+                getExerciseDto.getCommon()?criteriaBuilder.equal(root.get(ExerciseTemplate_.common), true):criteriaBuilder.or(),//TODO shared and liked
+                getExerciseDto.getPublished()?criteriaBuilder.equal(root.get(ExerciseTemplate_.published), true):criteriaBuilder.or(),
+                getExerciseDto.getMy()&&trainer != null?criteriaBuilder.equal(root.get(ExerciseTemplate_.trainer), trainer):criteriaBuilder.or()
+        );
+        base = criteriaBuilder.and(
+                base,
+                type
+        );
+        return base;
     }
 }

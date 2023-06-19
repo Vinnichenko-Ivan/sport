@@ -230,7 +230,7 @@ public class GroupServiceImpl implements GroupService {
             if(userToDelete.getTrainer() == null) {
                 throw new BadRequestException(String.format("user %s not trainer", id));
             }
-            if(group.getTrainers().contains(userToDelete.getTrainer())) {
+            if(!group.getTrainers().contains(userToDelete.getTrainer())) {
                 throw new BadRequestException(String.format("user %s already in group", id));
             }
             group.getTrainers().remove(userToDelete.getTrainer());
@@ -242,7 +242,12 @@ public class GroupServiceImpl implements GroupService {
     public List<ShortTrainerDto> getTrainers(UUID groupId) {
         Group group = groupRepository.findById(groupId).orElseThrow(()->new NotFoundException("group not found"));
         User user = jwtProvider.getUser();
-        checkMemberRules(group, user);
+        try{
+            checkTrainerRules(group, user);
+        } catch (ForbiddenException e) {
+            checkMemberRules(group, user);
+        }
+
         return group.getTrainers().stream().map(trainerMapper::map).collect(Collectors.toList());
     }
 

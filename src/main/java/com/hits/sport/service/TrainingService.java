@@ -2,7 +2,9 @@ package com.hits.sport.service;
 
 import com.hits.sport.dto.common.PaginationAnswerDto;
 import com.hits.sport.dto.common.PaginationQueryDto;
+import com.hits.sport.dto.exercise.EditedExerciseAnswer;
 import com.hits.sport.dto.training.*;
+import com.hits.sport.model.edited.EditedExercise;
 
 
 import java.util.List;
@@ -24,4 +26,5 @@ public interface TrainingService {
     FullAppointTrainingDto getAppointTraining(UUID id);
 
     List<ShortAppointedTrainingDto> getMyAppointingTrainings();
+    EditedExerciseAnswer map(EditedExercise editedExercise);
 }

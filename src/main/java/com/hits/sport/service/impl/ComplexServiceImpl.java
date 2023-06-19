@@ -13,6 +13,7 @@ import com.hits.sport.repository.ExerciseTemplateRepository;
 import com.hits.sport.repository.specification.ComplexSpecification;
 import com.hits.sport.service.ComplexService;
 import com.hits.sport.service.ExerciseService;
+import com.hits.sport.service.TrainingService;
 import com.hits.sport.utils.JwtProvider;
 import com.hits.sport.utils.Utils;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ComplexServiceImpl implements ComplexService {
     private final ComplexMapper complexMapper;
+    private final TrainingService trainingService;
     private final ComplexRepository complexRepository;
     private final ExerciseTemplateRepository exerciseTemplateRepository;
     private final ExerciseService exerciseService;
@@ -59,14 +60,16 @@ public class ComplexServiceImpl implements ComplexService {
     public FullComplexDto getComplex(UUID complexId) {
         exerciseService.checkTrainer(jwtProvider.getUser().getTrainer());
         ComplexTemplate complexTemplate = complexRepository.findById(complexId).orElseThrow(() -> new NotFoundException("complex not found"));
-        return complexMapper.map(complexTemplate);
+        var temp = complexMapper.map(complexTemplate);
+        temp.setExercises(complexTemplate.getEditedExercises().stream().map(trainingService::map).collect(Collectors.toList()));
+        return temp;
         //throw new NotImplementedException();// TODO проверка доступа
     }
 
     @Override
     public PaginationAnswerDto<ShortComplexDto> getComplexes(QueryComplexDto queryComplexDto, PaginationQueryDto paginationQueryDto) {
         exerciseService.checkTrainer(jwtProvider.getUser().getTrainer());
-        Page<ComplexTemplate> page = complexRepository.findAll(new ComplexSpecification(), Utils.toPageable(paginationQueryDto));
+        Page<ComplexTemplate> page = complexRepository.findAll(new ComplexSpecification(queryComplexDto), Utils.toPageable(paginationQueryDto));
         PaginationAnswerDto<ShortComplexDto> dto = Utils.toAnswer(page, (complex) -> {
             ShortComplexDto complexDto = complexMapper.mapToShort(complex);
             return complexDto;

@@ -1,5 +1,7 @@
-package com.hits.sport.model;
+package com.hits.sport.dto;
 
+import com.hits.sport.model.ExerciseValues;
+import com.hits.sport.model.MuscleGroup;
 import lombok.Data;
 
 import javax.persistence.*;

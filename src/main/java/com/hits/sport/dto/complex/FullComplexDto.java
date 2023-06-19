@@ -1,5 +1,6 @@
 package com.hits.sport.dto.complex;
 
+import com.hits.sport.dto.exercise.EditedExerciseAnswer;
 import com.hits.sport.model.ComplexType;
 import lombok.Data;
 
@@ -17,5 +18,5 @@ public class FullComplexDto {
     private Integer repetitions;
     private Integer spaceDuration;
     private Boolean template;
-    private List<SetExerciseDto> exercises;
+    private List<EditedExerciseAnswer> exercises;
 }

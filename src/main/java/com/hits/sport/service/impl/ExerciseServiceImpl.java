@@ -2,13 +2,14 @@ package com.hits.sport.service.impl;
 
 import com.hits.sport.dto.common.PaginationAnswerDto;
 import com.hits.sport.dto.common.PaginationQueryDto;
+import com.hits.sport.dto.exercise.EditExerciseDto;
 import com.hits.sport.dto.exercise.FullExerciseDto;
 import com.hits.sport.dto.exercise.GetExerciseDto;
 import com.hits.sport.dto.exercise.ShortExerciseDto;
 import com.hits.sport.exception.ForbiddenException;
 import com.hits.sport.exception.NotFoundException;
 import com.hits.sport.mapper.ExerciseMapper;
-import com.hits.sport.model.CreateExerciseDto;
+import com.hits.sport.dto.CreateExerciseDto;
 import com.hits.sport.model.template.ExerciseTemplate;
 import com.hits.sport.model.Trainer;
 import com.hits.sport.model.User;
@@ -64,6 +65,13 @@ public class ExerciseServiceImpl implements ExerciseService {
         }
     }
 
-
-
+    @Override
+    public void editExercise(UUID exerciseId, EditExerciseDto editExerciseDto) {
+        ExerciseTemplate exerciseTemplate = exerciseTemplateRepository.findById(exerciseId).orElseThrow(() -> new NotFoundException("exercise not found"));
+        if(!exerciseTemplate.getTrainer().getId().equals(jwtProvider.getUser().getId())) {
+            throw new ForbiddenException();
+        }
+        exerciseMapper.map(exerciseTemplate, editExerciseDto);
+        exerciseTemplateRepository.save(exerciseTemplate);
+    }
 }

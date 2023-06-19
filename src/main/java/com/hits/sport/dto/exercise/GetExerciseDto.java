@@ -13,5 +13,7 @@ public class GetExerciseDto {
     private Boolean common;
     private Boolean my;
     private Boolean shared;
+    private Boolean published;
+    private Boolean liked;
     private PaginationQueryDto paginationQueryDto;
 }

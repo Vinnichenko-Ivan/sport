@@ -251,7 +251,8 @@ public class TrainingServiceImpl implements TrainingService {
         return dto;
     }
 
-    private EditedExerciseAnswer map(EditedExercise editedExercise) {
+    @Override
+    public EditedExerciseAnswer map(EditedExercise editedExercise) {
         EditedExerciseAnswer dto = new EditedExerciseAnswer();
         dto.setExerciseValues(editedExercise.getExerciseValues());
         dto.setOrderNumber(editedExercise.getOrderNumber());
