@@ -108,6 +108,24 @@ INSERT INTO edited_complex(id, complex_type, order_number, repetitions, space_du
 ('054f4dbf-76cd-41cd-8d10-b7f294b40aab','MANY',2,5,120),
 ('054f4dbf-76cd-41cd-8d10-b7f294b40aac','MANY',4,3,60);
 
+INSERT INTO edited_complex_edited_exercises(edited_complex_id, edited_exercises_id) VALUES
+    ('054f4dbf-76cd-41cd-8d10-b7f294b40aaa','054f4dbf-76cd-41cd-8d10-b7f294b40aaa'),
+    ('054f4dbf-76cd-41cd-8d10-b7f294b40aaa','054f4dbf-76cd-41cd-8d10-b7f294b40aab'),
+    ('054f4dbf-76cd-41cd-8d10-b7f294b40aaa','054f4dbf-76cd-41cd-8d10-b7f294b40aac'),
+    ('054f4dbf-76cd-41cd-8d10-b7f294b40aaa','054f4dbf-76cd-41cd-8d10-b7f294b40aad'),
+    ('054f4dbf-76cd-41cd-8d10-b7f294b40aab','054f4dbf-76cd-41cd-8d10-b7f294b40aae'),
+    ('054f4dbf-76cd-41cd-8d10-b7f294b40aab','054f4dbf-76cd-41cd-8d10-b7f294b40aa1'),
+    ('054f4dbf-76cd-41cd-8d10-b7f294b40aab','054f4dbf-76cd-41cd-8d10-b7f294b40aa2'),
+    ('054f4dbf-76cd-41cd-8d10-b7f294b40aac','054f4dbf-76cd-41cd-8d10-b7f294b40aa3'),
+    ('054f4dbf-76cd-41cd-8d10-b7f294b40aac','054f4dbf-76cd-41cd-8d10-b7f294b40aa4'),
+    ('054f4dbf-76cd-41cd-8d10-b7f294b40aac','054f4dbf-76cd-41cd-8d10-b7f294b40aa5'),
+    ('054f4dbf-76cd-41cd-8d10-b7f294b40aac','054f4dbf-76cd-41cd-8d10-b7f294b40aa6'),
+    ('054f4dbf-76cd-41cd-8d10-b7f294b40aac','054f4dbf-76cd-41cd-8d10-b7f294b40aa7'),
+    ('054f4dbf-76cd-41cd-8d10-b7f294b40aac','054f4dbf-76cd-41cd-8d10-b7f294b40aa8'),
+    ('054f4dbf-76cd-41cd-8d10-b7f294b40aac','054f4dbf-76cd-41cd-8d10-b7f294b40aa9'),
+    ('054f4dbf-76cd-41cd-8d10-b7f294b40aac','054f4dbf-76cd-41cd-8d10-b7f294b40aa0'),
+    ('054f4dbf-76cd-41cd-8d10-b7f294b40aac','054f4dbf-76cd-41cd-8d10-b7f294b40a1a');
+
 INSERT INTO training_template_edited_complexes(training_template_id, edited_complexes_id) VALUES
 ('054f4dbf-76cd-41cd-8d10-b7f294b40aaa','054f4dbf-76cd-41cd-8d10-b7f294b40aaa'),
 ('054f4dbf-76cd-41cd-8d10-b7f294b40aaa','054f4dbf-76cd-41cd-8d10-b7f294b40aab'),
