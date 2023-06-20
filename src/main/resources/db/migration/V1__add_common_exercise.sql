@@ -1,5 +1,5 @@
 INSERT INTO public.exercise
-    (id, common, duration, repetitions, weight, description, image_id, name, published,trainer_id)
+    (id, common, duration, repetitions, weight,name , image_id, description, published,trainer_id)
 VALUES
 ('054f4dbf-76cd-41cd-8d10-b7f294b40aaa',true,10,10,0,'Отжимания',null,'Базовое физическое упражнение, выполняемое в планке и представляющее собой опускание-поднятие тела с помощью рук от пола (скамьи, стены). Возможно, с дополнительным отягощением.',false,null),
 ('054f4dbf-76cd-41cd-8d10-b7f294b40aab',true,10,10,0,'Подтягивания',null,'Базовое физическое упражнение, развивающее группы мышц верхней части тела: широчайшая, бицепс, брахиалис, предплечья. Выполняется в висе. Представляет собой поднятие и опускание тела с помощью рук. ',false,null),
