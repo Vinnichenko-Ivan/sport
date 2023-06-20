@@ -252,7 +252,9 @@ public class TrainingServiceImpl implements TrainingService {
         EditedExerciseAnswer dto = new EditedExerciseAnswer();
         dto.setExerciseValues(editedExercise.getExerciseValues());
         dto.setOrderNumber(editedExercise.getOrderNumber());
-        dto.setExerciseId(editedExercise.getId());
+        dto.setExerciseId(editedExercise.getExercise().getId());
+        dto.setImageId(editedExercise.getExercise().getImageId());
+        dto.setName(editedExercise.getExercise().getName());
         return dto;
     }
 

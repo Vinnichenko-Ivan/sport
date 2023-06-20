@@ -55,6 +55,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         checkTrainer(trainer);
         ExerciseTemplate exerciseTemplate = exerciseMapper.map(createExerciseDto);
         exerciseTemplate.setTrainer(trainer);
+        exerciseTemplate.setCommon(false);
         exerciseTemplateRepository.save(exerciseTemplate);
     }
 

@@ -12,4 +12,6 @@ public class EditedExerciseAnswer {
     private UUID exerciseId;
     private ExerciseValues exerciseValues;
     private Integer orderNumber;
+    private UUID imageId;
+    private String name;
 }
