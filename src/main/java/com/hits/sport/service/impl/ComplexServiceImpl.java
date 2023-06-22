@@ -49,6 +49,7 @@ public class ComplexServiceImpl implements ComplexService {
                     );
                     editedExercise.setOrderNumber(complexCreateDto.getExercises().indexOf(setExerciseDto) + 1);
                     editedExercise.setExerciseValues(setExerciseDto.getExerciseValues());
+                    editedExercise.setOrderNumber(complexCreateDto.getExercises().indexOf(setExerciseDto) + 1);
                     editedExercise = exerciseRepository.save(editedExercise);
                     return editedExercise;
                 }

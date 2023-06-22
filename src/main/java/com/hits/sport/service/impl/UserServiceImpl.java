@@ -102,9 +102,9 @@ public class UserServiceImpl implements UserService {
             user.setConfirm(true);
             userRepository.save(user);
         } catch (Exception e) {
-            return "Не подтверждено";
+            return "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Email confirm</title></head><body style=\"background: linear-gradient(90deg, #505b8b,#60769a,#828282); display: flex;justify-content: center;align-items: center;height: 100vh;\"><main><h1 style=\"text-align: center; color: antiquewhite\">Почта не подтверждена! Токен не верен.</h1></main></body></html>";
         }
-        return "Подтверждено";
+        return "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Email confirm</title></head><body style=\"background: linear-gradient(90deg, #505b8b,#60769a,#828282); display: flex;justify-content: center;align-items: center;height: 100vh;\"><main><h1 style=\"text-align: center; color: antiquewhite\">Почта подтверждена!</h1></main></body></html>";
     }
 
     @Override

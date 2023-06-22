@@ -74,13 +74,15 @@ public class TrainingServiceImpl implements TrainingService {
         dto.setCommon(trainingTemplate.getCommon());
         dto.setDescription(trainingTemplate.getDescription());
         dto.setPublished(trainingTemplate.getPublished());
+        dto.setName(trainingTemplate.getName());
         dto.setId(trainingTemplate.getId());
         dto.setComplexes(trainingTemplate.getEditedComplexes().stream().map((complex)->{
             EditedComplexAnswer editedComplexAnswer = new EditedComplexAnswer();
             editedComplexAnswer.setComplexId(complex.getId());
-            editedComplexAnswer.setOrderNumber(editedComplexAnswer.getOrderNumber());
+            editedComplexAnswer.setOrderNumber(complex.getOrderNumber());
+            var temp = complex.getEditedExercises().stream().map(this::map).collect(Collectors.toList());
             editedComplexAnswer.setExerciseValues(
-                    complex.getEditedExercises().stream().map(this::map).collect(Collectors.toList())
+                    temp
             );
             return editedComplexAnswer;
         }).collect(Collectors.toList()));
@@ -92,6 +94,7 @@ public class TrainingServiceImpl implements TrainingService {
     @Override
     @Transactional
     public void createTraining(TrainingCreateDto trainingCreateDto) {
+        trainingCreateDto.setCommon(false);
         exerciseService.checkTrainer(jwtProvider.getUser().getTrainer());
         TrainingTemplate trainingTemplate = trainingMapper.map(trainingCreateDto);
         trainingTemplate.setTrainer(jwtProvider.getUser().getTrainer());
@@ -234,10 +237,11 @@ public class TrainingServiceImpl implements TrainingService {
         dto.setTrainerName(appointedTraining.getTrainer().getUser().getName());
         dto.setDescription(appointedTraining.getDescription());
         dto.setId(appointedTraining.getId());
+        dto.setDates(appointedTraining.getDates());
         dto.setComplexes(appointedTraining.getEditedComplexes().stream().map((complex)->{
             EditedComplexAnswer editedComplexAnswer = new EditedComplexAnswer();
             editedComplexAnswer.setComplexId(complex.getId());
-            editedComplexAnswer.setOrderNumber(editedComplexAnswer.getOrderNumber());
+            editedComplexAnswer.setOrderNumber(complex.getOrderNumber());
             editedComplexAnswer.setExerciseValues(
                     complex.getEditedExercises().stream().map(this::map).collect(Collectors.toList())
             );
@@ -287,7 +291,7 @@ public class TrainingServiceImpl implements TrainingService {
         editedComplex.setRepetitions(complex.getRepetitions());
         editedComplex.setOrderNumber(complex.getOrderNumber());
         editedComplex.setSpaceDuration(complex.getSpaceDuration());
-        if(editedComplex.getEditedExercises() != null) {
+        if(complex.getExercises() != null) {
             editedComplex.setEditedExercises(complex.getExercises().stream().map(this::map).collect(Collectors.toList()));
         }
         editedComplex = editedComplexRepository.save(editedComplex);
@@ -338,17 +342,17 @@ public class TrainingServiceImpl implements TrainingService {
         }
     }
     private void checkCounter(Integer counter, Integer real) {
-        if(counter != real) {
+        if(!Objects.equals(counter, real)) {
             throw new BadRequestException("bad order");
         }
     }
 
     private boolean checkCounter(Integer counter, Integer real1, Integer real2) {
-        if(counter == real1)
+        if(Objects.equals(counter, real1))
         {
             return true;
         }
-        else if(counter == real2)
+        else if(Objects.equals(counter, real2))
         {
             return false;
         }
