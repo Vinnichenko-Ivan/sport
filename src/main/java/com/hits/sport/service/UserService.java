@@ -5,6 +5,7 @@ import com.hits.sport.dto.user.CredentialsDto;
 import com.hits.sport.dto.user.EditUserDto;
 import com.hits.sport.dto.user.RegisterDto;
 import com.hits.sport.dto.user.UserDto;
+import org.springframework.http.ResponseEntity;
 
 public interface UserService {
 
@@ -18,7 +19,7 @@ public interface UserService {
 
     void restorePasswordToken(String login, String token, String password);
 
-    String confirmEmailToken(String token);
+    ResponseEntity<String> confirmEmailToken(String token);
 
     TokenDto restoreToken(String token);
 

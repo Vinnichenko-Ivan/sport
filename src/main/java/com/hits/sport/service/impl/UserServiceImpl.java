@@ -15,6 +15,8 @@ import com.hits.sport.repository.UserRepository;
 import com.hits.sport.service.*;
 import com.hits.sport.utils.JwtProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -96,15 +98,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public String confirmEmailToken(String token) {
+    public ResponseEntity<String> confirmEmailToken(String token) {
+        String text = "";
         try{
             User user = tokenService.getByToken(token, TokenType.CONFIRM, true);
             user.setConfirm(true);
             userRepository.save(user);
         } catch (Exception e) {
-            return "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Email confirm</title></head><body style=\"background: linear-gradient(90deg, #505b8b,#60769a,#828282); display: flex;justify-content: center;align-items: center;height: 100vh;\"><main><h1 style=\"text-align: center; color: antiquewhite\">Почта не подтверждена! Токен не верен.</h1></main></body></html>";
+            text = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Email confirm</title></head><body style=\"background: linear-gradient(90deg, #505b8b,#60769a,#828282); display: flex;justify-content: center;align-items: center;height: 100vh;\"><main><h1 style=\"text-align: center; color: antiquewhite\">Not confirmed!</h1></main></body></html>";
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.TEXT_HTML)
+                    .body(text);
         }
-        return "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Email confirm</title></head><body style=\"background: linear-gradient(90deg, #505b8b,#60769a,#828282); display: flex;justify-content: center;align-items: center;height: 100vh;\"><main><h1 style=\"text-align: center; color: antiquewhite\">Почта подтверждена!</h1></main></body></html>";
+        text = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><title>Email confirm</title></head><body style=\"background: linear-gradient(90deg, #505b8b,#60769a,#828282); display: flex;justify-content: center;align-items: center;height: 100vh;\"><main><h1 style=\"text-align: center; color: antiquewhite\">Confirmed!</h1></main></body></html>";
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.TEXT_HTML)
+                .body(text);
     }
 
     @Override
